@@ -1,0 +1,150 @@
+/* Contenedor de detalles */
+.detalles-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff5f5; /* Fondo ligeramente rosado */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-left: 5px solid #da321cf8; /* Borde rojizo */
+  width: 25%;
+  margin: 0 auto;
+  transition: box-shadow 0.3s ease;
+}
+
+.detalles-container:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.detalles-content {
+  flex: 1;
+}
+
+.detalles-content p,
+.detalles-content h2,
+.botones-container button {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Título de los detalles */
+.detalles-container h2 {
+  text-align: center;
+  color: #8d3535; /* Color rojizo para el título */
+  font-weight: 600;
+  font-size: 1.5rem; /* Tamaño de fuente aumentado */
+  border-bottom: 2px solid #8d3535; /* Línea inferior rojiza */
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+/* Contenido de los detalles */
+.detalles-content p {
+  font-size: 1rem;
+  margin: 10px 0; /* Espaciado superior e inferior aumentado */
+  line-height: 1.6;
+  color: #7f8c8d;
+}
+
+.detalles-content strong {
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+/* Contenedor de botones */
+.botones-container {
+  display: flex;
+  flex-direction: column; /* Cambia la dirección a columna */
+  align-items: center;
+  gap: 20px; /* Espacio entre botones */
+  margin-top: 20px; /* Espacio superior */
+}
+
+/* Contenedor de los botones en fila */
+.botones-fila {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.botones-container button:hover,
+.botones-fila button:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+.botones-container button:active,
+.botones-fila button:active {
+  transform: translateY(0);
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+  .detalles-container {
+    padding: 15px;
+    margin: 10px;
+    width: 90%;
+  }
+
+  .detalles-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .detalles-content p {
+    font-size: 0.9rem;
+  }
+
+  .botones-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .botones-fila {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .botones-container button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .detalles-container {
+    padding: 10px;
+    margin: 5px;
+    width: 95%;
+  }
+
+  .detalles-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .detalles-content p {
+    font-size: 0.8rem;
+  }
+
+  .botones-container {
+    gap: 10px;
+  }
+
+  .botones-fila {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .botones-container button {
+    width: 100%;
+  }
+}

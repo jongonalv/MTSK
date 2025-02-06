@@ -1,0 +1,56 @@
+.button-etiqueta {
+    background: linear-gradient(135deg, #b03a3a, #8f2929);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: 2px solid #721d1d;
+    border-radius: 6px;
+    margin: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 120px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(139, 0, 0, 0.3);
+}
+
+.button-etiqueta:hover {
+    background: linear-gradient(135deg, #8f2929, #721d1d);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(139, 0, 0, 0.5);
+}
+
+.button-etiqueta:active {
+    background: linear-gradient(135deg, #721d1d, #5a1616);
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(139, 0, 0, 0.3);
+}
+
+.button-agregar {
+    background: linear-gradient(135deg, #ff5e3a, #ff1c00);
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 14px 36px;
+    border: 1px solid #c0392b;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 6px 16px rgba(255, 87, 51, 0.5);
+    display: inline-block;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.button-agregar:hover {
+    background: linear-gradient(135deg, #ff784e, #e64a19);
+    transform: scale(1.04);
+}
+
+.button-agregar:active {
+    background: linear-gradient(135deg, #e84c3d, #c0392b);
+    box-shadow: 0 3px 12px rgba(255, 87, 51, 0.5);
+    transform: scale(0.96);
+}

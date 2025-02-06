@@ -1,0 +1,80 @@
+/* Contenedor principal de la barra de filtros */
+.barra-filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f0f0, #f8f8f8); /* Gradiente claro y suave */
+  padding: 12px 16px;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+  box-sizing: border-box;
+  gap: 10px;
+  border: 2px solid #e0e0e0; /* Borde más suave */
+}
+
+/* Elementos individuales de la barra de filtros */
+.barra-filter-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 150px;
+}
+
+/* Estilos para los inputs y selects */
+.barra-filter-item input,
+.barra-filter-item select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.barra-filter-item input:focus,
+.barra-filter-item select:focus {
+  border-color: #b04a4a; /* Color de borde al enfocar, rojo suave */
+  box-shadow: 0 0 8px rgba(176, 74, 74, 0.5); /* Sombra al enfocar */
+}
+
+/* Estilos para el botón */
+.barra-filter-item button {
+  padding: 10px 20px;
+  background-color: #c44b4b;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-left: auto;
+}
+
+.barra-filter-item button:hover {
+  background-color: #a04040; /* Fondo rojizo más oscuro al hacer hover */
+  transform: translateY(-1px); /* Efecto de elevación sutil */
+}
+
+.barra-filter-item button:active {
+  transform: translateY(0); /* Restablece la posición al hacer clic */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .barra-filter-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .barra-filter-item {
+    width: 100%;
+  }
+
+  .barra-filter-item button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
