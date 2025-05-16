@@ -30,9 +30,9 @@
 .button-agregar {
     background: linear-gradient(135deg, #ff5e3a, #ff1c00);
     color: #fff;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
-    padding: 14px 36px;
+    padding: 14px 16px;
     border: 1px solid #c0392b;
     border-radius: 10px;
     cursor: pointer;

@@ -1,5 +1,5 @@
 import React from 'react';
-import BarraFilter from './barraFilter';
+import BarraFilter from './BarraFiltros';
 
 const EquiposFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo, selectedDate, setSelectedDate }) => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
-import './botones.css';  // Importamos el archivo de estilos
+import './estilos/botones.css';
 
-const botonAgregar = ({ label, onClick }) => {
+const BotonAgregar = ({ label, onClick }) => {
   return (
     <button className="button-agregar" onClick={onClick}>
       {label}
@@ -9,4 +9,4 @@ const botonAgregar = ({ label, onClick }) => {
   );
 };
 
-export default botonAgregar;
+export default BotonAgregar;

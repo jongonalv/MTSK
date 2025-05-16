@@ -1,0 +1,14 @@
+.date-filter {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .date-filter:focus {
+    border-color: #ff0000;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  

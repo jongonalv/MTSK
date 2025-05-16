@@ -1,5 +1,5 @@
 import React from 'react';
-import "./tablas.css";
+import "./estilos/tablas.css";
 
 const EquiposTable = ({ filteredEquipos, handleRowClick }) => {
   return (
@@ -16,7 +16,7 @@ const EquiposTable = ({ filteredEquipos, handleRowClick }) => {
         <tbody>
           {filteredEquipos.length > 0 ? (
             filteredEquipos.map((equipo) => (
-              <tr key={equipo.id} onClick={() => handleRowClick(equipo)} className="clickable-row">
+              <tr key={equipo.etiquetaEquipo} onClick={() => handleRowClick(equipo)} className="clickable-row">
                 <td>{equipo.etiquetaEquipo}</td>
                 <td>{equipo.marca}</td>
                 <td>{equipo.modelo}</td>

@@ -1,25 +1,55 @@
 import React, { useState, useEffect } from "react";
-import EquiposInfo from "./EquiposInfo";
-import EquiposModal from "./EquiposModal";
-import EquiposButtons from "./EquiposButtons";
-import "./equipos.css";
-import "./formPopup.css";
-import "./equiposDetalles.css"; 
+import EquiposInfo from "../moleculas/EquiposDetallesInfo";
+import EquiposModal from "../moleculas/EquiposModal";
+import EquiposButtons from "../moleculas/EquiposButtons";
+import "./estilos/equipos.css";
+import "./estilos/formPopup.css";
+import "./estilos/equiposDetalles.css"; 
 
 const EquiposDetail = ({ equipo, reloadEquipos }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editableData, setEditableData] = useState(equipo);
+  const [editableData, setEditableData] = useState({
+    etiquetaEquipo: equipo.etiquetaEquipo || "",
+    tipo: equipo.tipo || "",
+    procesador: equipo.procesador || "",
+    discoDuro: equipo.discoDuro || "",
+    memoriaRAM: equipo.memoriaRAM || "",
+    numeroSerie: equipo.numeroSerie || "",
+    numeroPedido: equipo.numeroPedido || "",
+    fechaCompra: equipo.fechaCompra || "",
+    garantia: equipo.garantia || "",
+    empresa: equipo.empresa || "",
+    marca: equipo.marca || "",
+    modelo: equipo.modelo || "",
+    sistemaOperativo: equipo.sistemaOperativo || "",
+    usuario: equipo.usuario || "", // Asegúrate de incluir la propiedad usuario
+  });
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setEditableData(equipo);
+    setEditableData({
+      etiquetaEquipo: equipo.etiquetaEquipo || "",
+      tipo: equipo.tipo || "",
+      procesador: equipo.procesador || "",
+      discoDuro: equipo.discoDuro || "",
+      memoriaRAM: equipo.memoriaRAM || "",
+      numeroSerie: equipo.numeroSerie || "",
+      numeroPedido: equipo.numeroPedido || "",
+      fechaCompra: equipo.fechaCompra || "",
+      garantia: equipo.garantia || "",
+      empresa: equipo.empresa || "",
+      marca: equipo.marca || "",
+      modelo: equipo.modelo || "",
+      sistemaOperativo: equipo.sistemaOperativo || "",
+      usuario: equipo.usuario || "", // Asegúrate de incluir la propiedad usuario
+    });
   }, [equipo]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditableData((prev) => ({
       ...prev,
-      [name]: name === "fechaCompra" ? new Date(value).toISOString().split("T")[0] : value,
+      [name]: value,
     }));
   };
 
@@ -51,11 +81,16 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
           memoriaRAM: editableData.memoriaRAM,
           numeroSerie: editableData.numeroSerie,
           numeroPedido: editableData.numeroPedido,
+          sistemaOperativo: editableData.sistemaOperativo,
+          usuario: editableData.usuario, // Asegúrate de incluir la propiedad usuario
         }),
       });
 
       setIsModalOpen(false);
-      setTimeout(() => reloadEquipos(), 200);
+      setTimeout(() => {
+        reloadEquipos();
+        setEditableData(equipo); // Recargar la información del equipo
+      }, 200);
     } catch (error) {
       setError(error.message);
     }
@@ -64,11 +99,12 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
   return (
     <div>
       <h2 className="fade-in">Detalles del Equipo</h2>
-      <EquiposInfo equipo={equipo} />
+      <EquiposInfo equipo={editableData} />
       {error && <div className="error-message">{error}</div>}
       <EquiposButtons 
         setIsModalOpen={setIsModalOpen} 
-        equipo={equipo} 
+        equipo={editableData} 
+        onEquiposUpdated={reloadEquipos}
       />
       <EquiposModal 
         isOpen={isModalOpen} 
@@ -76,6 +112,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
         data={editableData} 
         onChange={handleInputChange} 
         onSave={handleSave} 
+        reloadEquipos={reloadEquipos} // Pasar reloadEquipos aquí
       />
     </div>
   );

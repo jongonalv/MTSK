@@ -7,6 +7,7 @@
   background: #f8f8f8;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border: 2px solid #c44b4b;
+  position: relative;
 }
 
 /* Estilos de la tabla */
@@ -41,24 +42,44 @@
   text-align: left;
   background-color: #fff;
   transition: background 0.3s ease;
+  cursor: pointer;
 }
 
 /* Ajuste para la columna "Etiqueta" */
 .equipos-table td:first-child {
   font-weight: bold;
-  color: #b02a2a; /* Rojo oscuro para destacar */
+  color: #b02a2a;
 }
-
 
 /* Alternar colores en filas */
 .equipos-table tbody tr:nth-child(odd) td {
-  background-color: #f5e6e6; /* Color pastel rojizo suave */
+  background-color: #f5e6e6;
 }
 
 /* Efecto hover */
 .equipos-table tbody tr:hover td {
   background-color: #e8b4b4;
   color: #c44b4b;
+}
+
+/* Estilos para el scroll */
+.table-container::-webkit-scrollbar {
+  width: 18px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c44b4b;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a83838;
 }
 
 /* Responsivo */

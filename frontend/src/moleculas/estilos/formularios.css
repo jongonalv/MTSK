@@ -1,27 +1,27 @@
 /* Estilo minimalista del formulario de equipos */
 .equipos-form {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 25px;
-  background-color: #fef4f4; /* Fondo suave con un toque rosado */
+  padding: 10px;
+  background-color: #fef4f4;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); /* Sombra más profunda */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
   font-family: 'Roboto', sans-serif;
   animation: smoothFadeIn 0.2s ease-out;
+  box-sizing: border-box;
 }
 
-/* Grupos de formulario alineados en columna */
 .equipos-form .form-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 3px;
 }
 
 .equipos-form label {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #5c0202;
   font-weight: bolder;
   text-transform: uppercase;
@@ -58,7 +58,7 @@
   background-position: right 12px center;
   background-repeat: no-repeat;
   background-size: 15px;
-  padding-right: 30px; /* Espacio para el icono */
+  padding-right: 20px; /* Espacio para el icono */
 }
 
 /* Inputs y selects en foco */
@@ -67,29 +67,6 @@
   border-color: #c0392b; /* Rojo más intenso */
   box-shadow: 0 0 5px rgb(255, 25, 0.3); /* Sombra más marcada */
   outline: none;
-}
-
-/* Botones */
-.equipos-form .form-buttons {
-  grid-column: span 2; /* Ocupa las dos columnas */
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin-top: 15px;
-}
-
-.equipos-form .form-buttons button {
-  padding: 14px 15px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: #e74c3c; /* Rojo suave */
-  color: #fff; /* Texto blanco */
-  transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.3s ease;
-  flex: 1;
-  font-weight: 600;
-  letter-spacing: 1px;
 }
 
 /* Diseño responsivo */

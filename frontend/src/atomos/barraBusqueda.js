@@ -1,16 +1,20 @@
 import React from 'react';
-import "./barraBusqueda.css"
+import './estilos/barraBusqueda.css';
 
-const barraBusqueda = ({ searchTerm, handleSearchChange }) => {
+const BarraBusqueda = ({ searchTerm, handleSearchChange }) => {
+  const handleChange = (e) => {
+    handleSearchChange(e.target.value);
+  };
+
   return (
     <input
       type="text"
-      placeholder="Buscar por etiqueta o marca..."
+      placeholder="Buscar por etiqueta, marca o usuario..."
       value={searchTerm}
-      onChange={handleSearchChange}
+      onChange={handleChange}
       className="search-input"
     />
   );
 };
 
-export default barraBusqueda;
+export default BarraBusqueda;

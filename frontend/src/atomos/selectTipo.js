@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import "./selectTipo.css";
+import "./estilos/selectTipo.css";
 
 const SelectTipo = ({ label, onChange }) => {
 
@@ -21,7 +21,7 @@ const SelectTipo = ({ label, onChange }) => {
                 className="filter-select"
             >
                 <option value="">Todos</option>
-                <option value="Portátil">Portátil</option>
+                <option value="Portatil">Portátil</option>
                 <option value="Sobremesa">Sobremesa</option>
                 <option value="Backup">Backup</option>
                 <option value="Workstation">Workstation</option>

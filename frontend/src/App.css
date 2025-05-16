@@ -2,31 +2,29 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  min-height: 100vh; /* Cambia de height a min-height */
-  overflow-y: auto; /* Permite el desplazamiento vertical */
+  min-height: 100vh;
   background: radial-gradient(circle, #ffffff, #dfe6e9);
   background-image: url('https://www.transparenttextures.com/patterns/hexellence.png'); /* Fondo más visible */
-  background-size: 300px; /* Hace que los hexágonos sean más grandes y notables */
-  background-blend-mode: multiply; /* Hace que se mezcle mejor con el fondo */
-  opacity: 0.9; /* Ajusta la visibilidad */
+  background-size: 300px;
+  background-blend-mode: multiply;
+  opacity: 0.9;
 }
-
 
 .arcoiris-text {
   text-align: center;
   font-size: 1.2rem;
   margin-left: 30px;
   font-weight: bold;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  background: linear-gradient(to right, red, rgba(255, 145, 0, 0.973), rgb(194, 181, 0), green, blue, indigo, violet);
   -webkit-background-clip: text;
   color: transparent;
   display: inline;
   margin-top: auto;
   padding: 10px 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.5); /* Fondo más sutil */
+  background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 10px; /* Bordes redondeados */
+  border-radius: 10px;
 }
 
 @keyframes fadeIn {

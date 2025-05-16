@@ -1,5 +1,5 @@
 import React from 'react';
-import './botones.css';  // Importamos el archivo de estilos
+import './estilos/botones.css';
 
 const BotonSinpleRojo = ({ label, onClick }) => {
   return (

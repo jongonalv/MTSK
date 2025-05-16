@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './menu.css';
-import Equipos from '../organismos/Equipos'; // Importando Equipos desde ../organismos/equipos
+import './estilos/menu.css';
+import Equipos from '../paginas/Equipos'; // Importando Equipos desde ../organismos/equipos
 import logo from '../resources/logolargo.png'; // Importar la imagen desde la carpeta src
 
 const Menu = () => {
+
+  // Estados
   const [selectedComponent, setSelectedComponent] = useState('inicio');
   const [equiposData, setEquiposData] = useState([]);
   const [recentEquipos, setRecentEquipos] = useState([]);
@@ -13,26 +15,25 @@ const Menu = () => {
     setSelectedComponent(component);
   };
 
-    // Función para recargar los datos
-    const fetchEquipos = () => {
-      fetch('http://localhost:3001/equipos')
-        .then((response) => response.json())
-        .then((data) => {
-          setEquiposData(data);
-  
-          // Filtrar los equipos más recientes, por ejemplo, los últimos 5 añadidos
-          const sortedEquipos = data.sort((a, b) => new Date(b.fechaCompra) - new Date(a.fechaCompra));
-          setRecentEquipos(sortedEquipos.slice(0, 8)); 
-        })
-        .catch((error) => {
-          console.error('Error al cargar los datos: ', error);
-        });
-    };
-  
-    // Llamada inicial
-    useEffect(() => {
-      fetchEquipos();
-    }, []);
+  // Función para obtener los equipos
+  const fetchEquipos = () => {
+    fetch('http://localhost:3001/equipos')
+      .then((response) => response.json())
+      .then((data) => {
+        setEquiposData(data);
+
+        const sortedEquipos = data.sort((a, b) => new Date(b.fechaCompra) - new Date(a.fechaCompra));
+        setRecentEquipos(sortedEquipos.slice(0, 8)); 
+      })
+      .catch((error) => {
+        console.error('Error al cargar los datos: ', error);
+      });
+  };
+
+  // Llamada inicial
+  useEffect(() => {
+    fetchEquipos();
+  }, []);
 
   return (
     <div>
@@ -54,7 +55,7 @@ const Menu = () => {
       </nav>
 
       {/* Renderizado de los componentes basados en el estado */}
-      {selectedComponent === 'equipos' && <Equipos equiposData={equiposData} recentEquipos={recentEquipos} />}
+      {selectedComponent === 'equipos' && <Equipos equiposData={equiposData} recentEquipos={recentEquipos} fetchEquipos={fetchEquipos} />}
       {selectedComponent === 'inicio' && <h1>Inicio</h1>}
       {selectedComponent === 'nuevo-movimiento' && <h1>Nuevo Movimiento</h1>}
       {selectedComponent === 'impresoras' && <h1>Impresoras</h1>}

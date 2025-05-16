@@ -1,9 +1,15 @@
 import React from "react";
-import EquiposForm from "../moleculas/equiposForm";
+import EquiposForm from "./FormularioEditarEquipos";
 import BotonSinpleRojo from "../atomos/botonSinple";
 
-const EquiposModal = ({ isOpen, onClose, data, onChange, onSave }) => {
+const EquiposModal = ({ isOpen, onClose, data, onChange, onSave, reloadEquipos }) => {
   if (!isOpen) return null;
+
+  const handleSave = async () => {
+    await onSave();
+    reloadEquipos();
+    onClose();
+  };
 
   return (
     <div className="modal open">
@@ -16,7 +22,7 @@ const EquiposModal = ({ isOpen, onClose, data, onChange, onSave }) => {
           <EquiposForm data={data} onChange={onChange} />
         </div>
         <div className="modal-footer">
-          <BotonSinpleRojo label="Guardar" onClick={onSave} />
+          <BotonSinpleRojo label="Guardar" onClick={handleSave} />
         </div>
       </div>
     </div>
