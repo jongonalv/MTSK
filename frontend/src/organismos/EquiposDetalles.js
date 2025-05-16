@@ -22,7 +22,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
     marca: equipo.marca || "",
     modelo: equipo.modelo || "",
     sistemaOperativo: equipo.sistemaOperativo || "",
-    usuario: equipo.usuario || "", // Asegúrate de incluir la propiedad usuario
+    usuario: equipo.usuario || "",
   });
   const [error, setError] = useState(null);
 
@@ -41,7 +41,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
       marca: equipo.marca || "",
       modelo: equipo.modelo || "",
       sistemaOperativo: equipo.sistemaOperativo || "",
-      usuario: equipo.usuario || "", // Asegúrate de incluir la propiedad usuario
+      usuario: equipo.usuario || "",
     });
   }, [equipo]);
 
@@ -53,15 +53,17 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
     }));
   };
 
+  // Función para guardar los cambios en el equipo
+  // Envía los datos editados a los endpoints correspondientes
   const handleSave = async () => {
     try {
       setError(null);
-      
+
       await fetch("http://localhost:3001/updateProducto", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          etiqueta: editableData.etiqueta,
+          etiqueta: editableData.etiquetaEquipo,
           fechaCompra: editableData.fechaCompra,
           garantia: editableData.garantia,
           empresa: editableData.empresa,
@@ -82,15 +84,20 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
           numeroSerie: editableData.numeroSerie,
           numeroPedido: editableData.numeroPedido,
           sistemaOperativo: editableData.sistemaOperativo,
-          usuario: editableData.usuario, // Asegúrate de incluir la propiedad usuario
+          usuario: editableData.usuario,
         }),
       });
 
       setIsModalOpen(false);
+
+      // Actualiza el estado local con los datos editados
+      setEditableData({ ...editableData });
+
+      // Recarga los equipos después de guardar
       setTimeout(() => {
         reloadEquipos();
-        setEditableData(equipo); // Recargar la información del equipo
       }, 200);
+
     } catch (error) {
       setError(error.message);
     }

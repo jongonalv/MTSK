@@ -11,7 +11,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Ingl@terra_24$',
+    password: 'mysql',
     database: 'mtsk_version1',
     port: 3306
 });
@@ -226,6 +226,42 @@ app.delete('/equipo/:etiquetaEquipo', (req, res) => {
             });
         });
     });
+});
+
+// Ruta para obtener la siguiente etiqueta
+// Recibe un prefijo y devuelve el siguiente número de etiqueta
+app.get('/siguienteEtiqueta', (req, res) => {
+  console.log("Query recibida:", req.query);
+  const { prefijo } = req.query;
+  if (!prefijo) return res.status(400).json({ error: 'Prefijo requerido' });
+
+  const sql = `
+    SELECT etiquetaEquipo 
+    FROM equipo 
+    WHERE etiquetaEquipo LIKE ? 
+    ORDER BY etiquetaEquipo ASC
+  `;
+  db.query(sql, [`${prefijo}%`], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error en la base de datos' });
+
+    // Extrae los números usados
+    const usados = results
+      .map(r => parseInt(r.etiquetaEquipo.slice(prefijo.length), 10))
+      .filter(n => !isNaN(n))
+      .sort((a, b) => a - b);
+
+    // Busca el primer hueco
+    let siguienteNumero = 1;
+    for (let i = 0; i < usados.length; i++) {
+      if (usados[i] !== i + 1) {
+        siguienteNumero = i + 1;
+        break;
+      }
+      // Si no hay huecos, será el siguiente al mayor
+      siguienteNumero = usados.length + 1;
+    }
+    res.json({ siguienteNumero: siguienteNumero.toString().padStart(3, '0') });
+  });
 });
 
 // Inicializar el servidor 

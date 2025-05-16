@@ -1,12 +1,8 @@
-import React, { useState } from 'react'; 
+import React from 'react';
 import "./estilos/selectTipo.css";
 
-const SelectTipo = ({ label, onChange }) => {
-
-    const [selectedTipo, setSelectedTipo] = useState('');
-
+const SelectTipo = ({ label, value, onChange }) => {
     const handleTipoChange = (e) => {
-        setSelectedTipo(e.target.value);
         if (onChange) {
             onChange(e.target.value);
         }
@@ -14,9 +10,9 @@ const SelectTipo = ({ label, onChange }) => {
 
     return (
         <div className="select-tipo-container">
-            {label && <label className="select-label">{label}</label>}  {/* Mostrar la etiqueta si se pasa */}
+            {label && <label className="select-label">{label}</label>}
             <select
-                value={selectedTipo}
+                value={value}
                 onChange={handleTipoChange}
                 className="filter-select"
             >

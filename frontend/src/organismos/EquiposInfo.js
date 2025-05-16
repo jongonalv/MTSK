@@ -28,12 +28,16 @@ const EquiposInfo = ({
     setEquipos(filteredEquipos);
   }, [filteredEquipos]);
 
+  // Función para recargar los equipos después de editar uno
   const reloadEquipos = async () => {
     await fetchEquipos();
-    const updatedEquipo = equipos.find(e => e.etiquetaEquipo === selectedEquipo.etiquetaEquipo);
-    handleRowClick(updatedEquipo);
+    // Espera a que filteredEquipos se actualice antes de buscar el equipo actualizado
+    // Esto es necesario porque el estado de filteredEquipos puede no actualizarse inmediatamente
+    setTimeout(() => {
+      const updatedEquipo = filteredEquipos.find(e => e.etiquetaEquipo === selectedEquipo.etiquetaEquipo);
+      handleRowClick(updatedEquipo);
+    }, 150);
   };
-
   return (
     <div className="equipos-content">
       <div className="equipos-container">

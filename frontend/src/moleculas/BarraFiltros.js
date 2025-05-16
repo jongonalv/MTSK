@@ -19,7 +19,7 @@ const BarraFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo,
   return (
     <div className="barra-filter-container">
       <BarraBusqueda searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
-      <SelectTipo selectedTipo={selectedTipo} onChange={handleTipoChange} />
+      <SelectTipo value={selectedTipo} onChange={handleTipoChange} />
       <DateFilter selectedDate={selectedDate} handleDateChange={handleDateChange} />
       <BotonAgregar label="Agregar Equipo" onClick={() => setIsModalOpen(true)} />
 

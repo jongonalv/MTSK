@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './estilos/AgregarEquipoForm.css';
 import BotonAgregar from '../atomos/agregarButton'; // Importar el componente
 
 const AgregarEquipoForm = ({ onSubmit }) => {
+
+  // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
     etiquetaEquipo: '',
     tipo: 'PORTATIL',
+    esBackup: false,
     marca: '',
     modelo: '',
     procesador: '',
@@ -19,12 +22,50 @@ const AgregarEquipoForm = ({ onSubmit }) => {
     sistemaOperativo: 'Windows 10',
   });
 
+  // constante para generar la etiqueta del equipo en base al tipo y empresa
+  const getEtiquetaPrefix = (tipo, empresa, esBackup) => {
+    let prefix = '';
+    if (tipo === 'PORTATIL') prefix = 'P';
+    else if (tipo === 'WORKSTATION') prefix = 'W';
+    else if (tipo === 'SOBREMESA') prefix = 'S';
+
+    // Si es Backup, añade la B después del prefijo
+    if (esBackup) prefix = prefix[0] + 'B' + prefix.slice(1);
+
+    if (empresa === 'HT Legazpi') prefix += 'HT';
+    else if (empresa === 'AG Legazpi' || empresa === 'Rozalma') prefix += 'AG';
+
+    return prefix;
+  };
+
+  // Hook para generar la etiqueta del equipo al cargar el componente
+  useEffect(() => {
+    const generarEtiqueta = async () => {
+      const prefix = getEtiquetaPrefix(formData.tipo, formData.empresa, formData.esBackup);
+      if (!prefix) return;
+      try {
+        const res = await fetch(`http://localhost:3001/siguienteEtiqueta?prefijo=${prefix}`);
+        const data = await res.json();
+        setFormData(f => ({ ...f, etiquetaEquipo: `${prefix}${data.siguienteNumero}` }));
+      } catch (err) {
+        setFormData(f => ({ ...f, etiquetaEquipo: '' }));
+      }
+    };
+    generarEtiqueta();
+  }, [formData.tipo, formData.empresa, formData.esBackup]);
+
+
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
 
+  // Función para manejar los cambios en los campos del formulario
+  // Actualiza el estado del formulario y limpia los errores si existen
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
     }
@@ -54,26 +95,28 @@ const AgregarEquipoForm = ({ onSubmit }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        const tipoFinal = formData.esBackup ? "BACKUP" : formData.tipo;
+        const dataToSend = { ...formData, tipo: tipoFinal };
+        delete dataToSend.esBackup;
         const response = await fetch('http://localhost:3001/agregarEquipo', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(dataToSend), // <-- Usa dataToSend
         });
 
-        // Si la respuesta no es correcta, lanzar un error
         if (!response.ok) {
           throw new Error('Error al agregar el equipo');
         }
         setMessage('Equipo agregado correctamente');
-        onSubmit(formData);
+        onSubmit(dataToSend);
       } catch (error) {
         console.error(error);
         setMessage('Error al agregar el equipo');
       }
     } else {
-      setMessage('Por favor, complete todos los campos requeridos');
+      setMessage('Te has marcao un mango, se te ha bo');
     }
   };
 
@@ -85,18 +128,34 @@ const AgregarEquipoForm = ({ onSubmit }) => {
         <legend>Información del Equipo</legend>
         <div className="form-group">
           <label>Etiqueta de Equipo:</label>
-          <input type="text" name="etiquetaEquipo" value={formData.etiquetaEquipo} onChange={handleChange} required />
+          <input
+            type="text"
+            name="etiquetaEquipo"
+            value={formData.etiquetaEquipo}
+            readOnly // <-- Solo lectura
+            required
+          />
           {errors.etiquetaEquipo && <span className="error">{errors.etiquetaEquipo}</span>}
         </div>
-        <div className="form-group">
-          <label>Tipo:</label>
-          <select name="tipo" value={formData.tipo} onChange={handleChange}>
-            <option value="PORTATIL">PORTATIL</option>
-            <option value="WORKSTATION">WORKSTATION</option>
-            <option value="SOBREMESA">SOBREMESA</option>
-            <option value="BACKUP">BACKUP</option>
-          </select>
-        </div>
+      <div className="form-group">
+        <label>Tipo:</label>
+        <select name="tipo" value={formData.tipo} onChange={handleChange}>
+          <option value="PORTATIL">PORTATIL</option>
+          <option value="WORKSTATION">WORKSTATION</option>
+          <option value="SOBREMESA">SOBREMESA</option>
+        </select>
+      </div>
+      <div className="form-group">
+        <label>
+          <input
+            type="checkbox"
+            name="esBackup"
+            checked={formData.esBackup}
+            onChange={handleChange}
+          />
+          ¿Es Backup?
+        </label>
+      </div>
         <div className="form-group">
           <label>Marca:</label>
           <input type="text" name="marca" value={formData.marca} onChange={handleChange} required />

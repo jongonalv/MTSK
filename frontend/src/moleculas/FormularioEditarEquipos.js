@@ -2,6 +2,8 @@ import React from "react";
 import "./estilos/formularios.css";
 
 const EquiposForm = ({ data, onChange }) => {
+
+  // Nombres de las etiquetas para los campos del formulario
   const labelNames = {
     etiquetaEquipo: "Etiqueta",
     tipo: "Tipo",
@@ -18,6 +20,7 @@ const EquiposForm = ({ data, onChange }) => {
     sistemaOperativo: "Sistema Operativo",
   };
   
+  // Opciones para los select de tipo, RAM, empresa y sistema operativo
   const tiposOpciones = ["BACKUP", "WORKSTATION", "PORTATIL", "SOBREMESA"];
   const ramOpciones = ["4Gb", "8Gb", "12Gb", "16Gb", "24Gb", "32Gb", "64Gb"];
   const empresasOpciones = ["HT Legazpi", "AG Legazpi", "AG Rozalma"];
@@ -29,12 +32,12 @@ const EquiposForm = ({ data, onChange }) => {
         if (key === "usuario") {
           return null;
         }
-
         let inputElement;
 
         if (key === "tipo") {
           inputElement = (
             <select id={key} name={key} value={data[key] || ""} onChange={onChange}>
+              <option value="">Selecciona tipo</option>
               {tiposOpciones.map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -45,6 +48,7 @@ const EquiposForm = ({ data, onChange }) => {
         } else if (key === "memoriaRAM") {
           inputElement = (
             <select id={key} name={key} value={data[key] || ""} onChange={onChange}>
+              <option value="">Selecciona RAM</option>
               {ramOpciones.map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -55,7 +59,7 @@ const EquiposForm = ({ data, onChange }) => {
         } else if (key === "fechaCompra") {
           const formattedDate = data[key]
             ? new Date(data[key]).toISOString().split('T')[0]
-            : ""; 
+            : "";
           inputElement = (
             <input
               type="date"
@@ -68,6 +72,7 @@ const EquiposForm = ({ data, onChange }) => {
         } else if (key === "empresa") {
           inputElement = (
             <select id={key} name={key} value={data[key] || ""} onChange={onChange}>
+              <option value="">Selecciona empresa</option>
               {empresasOpciones.map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -78,6 +83,7 @@ const EquiposForm = ({ data, onChange }) => {
         } else if (key === "sistemaOperativo") {
           inputElement = (
             <select id={key} name={key} value={data[key] || ""} onChange={onChange}>
+              <option value="">Selecciona SO</option>
               {sistemasOperativosOpciones.map((option) => (
                 <option key={option} value={option}>
                   {option}
