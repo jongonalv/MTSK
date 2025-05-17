@@ -6,9 +6,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
   width: 95%;
-  height: 45%;
+  height: 42%;
   overflow-y: auto;
   border-left: 5px solid #5594f3f8;
+  margin: 0 auto 18px auto;
 }
 
 .recent-equipos-container:hover {

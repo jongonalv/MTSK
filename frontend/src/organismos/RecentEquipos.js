@@ -12,7 +12,7 @@ const RecentEquipos = ({ recentEquipos, handleRowClick, spinAnimationActive }) =
 
   return (
     <div className="recent-equipos-container">
-      <h2>Equipos Recientemente Añadidos</h2>
+      <h2>Equipos Recientemente Comprados</h2>
       {recentEquipos.length === 0 ? (
         <p>No hay equipos recientes.</p>
       ) : (

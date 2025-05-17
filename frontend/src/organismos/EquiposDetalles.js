@@ -112,6 +112,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
         setIsModalOpen={setIsModalOpen} 
         equipo={editableData} 
         onEquiposUpdated={reloadEquipos}
+        reloadEquipos={reloadEquipos}
       />
       <EquiposModal 
         isOpen={isModalOpen} 
@@ -119,7 +120,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
         data={editableData} 
         onChange={handleInputChange} 
         onSave={handleSave} 
-        reloadEquipos={reloadEquipos} // Pasar reloadEquipos aquí
+        reloadEquipos={reloadEquipos} 
       />
     </div>
   );

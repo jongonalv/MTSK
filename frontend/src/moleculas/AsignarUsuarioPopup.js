@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './estilos/asignarUsuarioPopup.css';
 
-const AsignarUsuarioPopup = ({ equipo, onClose, onAssign }) => {
+const AsignarUsuarioPopup = ({ equipo, onClose, onAssign, reloadEquipos }) => {
   const [usuarios, setUsuarios] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -25,6 +25,7 @@ const AsignarUsuarioPopup = ({ equipo, onClose, onAssign }) => {
   // Función para asignar un usuario al equipo
   const handleAssign = (user) => {
     onAssign(equipo, user.Usuario);
+    if (reloadEquipos) reloadEquipos();
     onClose();
   };
 

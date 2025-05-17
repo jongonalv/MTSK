@@ -9,23 +9,30 @@ import './estilos/barraFilter.css';
 import './estilos/Modal.css';
 import './estilos/AgregarEquipoForm.css';
 
-const BarraFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo, selectedDate, setSelectedDate }) => {
+// Componente BarraFilter que contiene los filtros y el botón para agregar un nuevo equipo
+const BarraFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo, selectedDate, setSelectedDate, fetchEquipos, reloadEquipos}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Funciones para manejar los cambios en los filtros
   const handleSearchChange = (value) => setSearchTerm(value);
   const handleTipoChange = (value) => setSelectedTipo(value);
   const handleDateChange = (value) => setSelectedDate(value);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <div className="barra-filter-container">
       <BarraBusqueda searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
       <SelectTipo value={selectedTipo} onChange={handleTipoChange} />
       <DateFilter selectedDate={selectedDate} handleDateChange={handleDateChange} />
-      <BotonAgregar label="Agregar Equipo" onClick={() => setIsModalOpen(true)} />
+      <BotonAgregar label="Agregar Equipo" type="submit" onClick={() => setIsModalOpen(true)} />
 
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <AgregarEquipoForm />
+          <AgregarEquipoForm 
+            onSubmit={handleCloseModal} 
+            fetchEquipos={fetchEquipos}
+            reloadEquipos={reloadEquipos}
+          />
         </Modal>
       )}
     </div>

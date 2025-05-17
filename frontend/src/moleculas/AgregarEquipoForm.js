@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './estilos/AgregarEquipoForm.css';
 import BotonAgregar from '../atomos/agregarButton'; // Importar el componente
 
-const AgregarEquipoForm = ({ onSubmit }) => {
+const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos}) => {
 
   // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
@@ -40,19 +40,24 @@ const AgregarEquipoForm = ({ onSubmit }) => {
 
   // Hook para generar la etiqueta del equipo al cargar el componente
   useEffect(() => {
-    const generarEtiqueta = async () => {
-      const prefix = getEtiquetaPrefix(formData.tipo, formData.empresa, formData.esBackup);
-      if (!prefix) return;
-      try {
-        const res = await fetch(`http://localhost:3001/siguienteEtiqueta?prefijo=${prefix}`);
-        const data = await res.json();
-        setFormData(f => ({ ...f, etiquetaEquipo: `${prefix}${data.siguienteNumero}` }));
-      } catch (err) {
-        setFormData(f => ({ ...f, etiquetaEquipo: '' }));
-      }
-    };
-    generarEtiqueta();
+    const timer = setTimeout(() => {
+      const generarEtiqueta = async () => {
+        const prefix = getEtiquetaPrefix(formData.tipo, formData.empresa, formData.esBackup);
+        if (!prefix) return;
+        try {
+          const res = await fetch(`http://localhost:3001/siguienteEtiqueta?prefijo=${prefix}`);
+          const data = await res.json();
+          setFormData(f => ({ ...f, etiquetaEquipo: `${prefix}${data.siguienteNumero}` }));
+        } catch (err) {
+          setFormData(f => ({ ...f, etiquetaEquipo: '' }));
+        }
+      };
+      generarEtiqueta();
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [formData.tipo, formData.empresa, formData.esBackup]);
+
 
 
   const [errors, setErrors] = useState({});
@@ -88,37 +93,52 @@ const AgregarEquipoForm = ({ onSubmit }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Función para enviar el formulario
-  // Se ejecuta al hacer click en el botón de agregar
-  // Envia los datos del formulario al servidor y el equipo se agrega al inventario
+    // Función para enviar el formulario
+    // Se ejecuta al hacer click en el botón de agregar
+    // Envia los datos del formulario al servidor y el equipo se agrega al inventario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      try {
-        const tipoFinal = formData.esBackup ? "BACKUP" : formData.tipo;
-        const dataToSend = { ...formData, tipo: tipoFinal };
-        delete dataToSend.esBackup;
-        const response = await fetch('http://localhost:3001/agregarEquipo', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataToSend), // <-- Usa dataToSend
-        });
 
-        if (!response.ok) {
-          throw new Error('Error al agregar el equipo');
-        }
-        setMessage('Equipo agregado correctamente');
-        onSubmit(dataToSend);
-      } catch (error) {
-        console.error(error);
-        setMessage('Error al agregar el equipo');
+    if (!validateForm()) {
+      setMessage('Te has marcao un mango, se te ha olvidao algo :)');
+      return;
+    }
+
+    try {
+      // Preparar los datos para enviar
+      const tipoFinal = formData.esBackup ? "BACKUP" : formData.tipo;
+      const { esBackup, ...rest } = formData;
+      const dataToSend = { ...rest, tipo: tipoFinal };
+
+      // Enviar los datos al servidor
+      const response = await fetch('http://localhost:3001/agregarEquipo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend),
+      });
+
+      // Comprobar si la respuesta es exitosa
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error del servidor: ${errorText}`);
       }
-    } else {
-      setMessage('Te has marcao un mango, se te ha bo');
+
+      setMessage('Equipo agregado correctamente');
+
+      // Ejecutar funciones adicionales si están definidas
+      const delayedActions = [fetchEquipos, reloadEquipos];
+      delayedActions.forEach(fn => {
+        if (fn) setTimeout(fn, 100);
+      });
+
+      if (onSubmit) onSubmit(dataToSend);
+
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+      setMessage('Error al agregar el equipo');
     }
   };
+
 
   // Renderizar el formulario
   return (

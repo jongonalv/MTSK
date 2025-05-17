@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BotonSinpleRojo from "../atomos/botonSinple";
 import AsignarUsuarioPopup from "./AsignarUsuarioPopup";
 
-const EquiposButtons = ({ setIsModalOpen, equipo, onEquiposUpdated }) => {
+const EquiposButtons = ({ setIsModalOpen, equipo, onEquiposUpdated, reloadEquipos }) => {
   const [isAssignPopupOpen, setIsAssignPopupOpen] = useState(false);
 
   // Función para imprimir los detalles del equipo
@@ -130,6 +130,7 @@ const EquiposButtons = ({ setIsModalOpen, equipo, onEquiposUpdated }) => {
             onEquiposUpdated();
           }}
           onAssign={handleAssign}
+          reloadEquipos={reloadEquipos}
         />
       )}
     </div>

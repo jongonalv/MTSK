@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import EquiposHeader from '../atomos/EquiposHeader';
 import EquiposFilter from '../moleculas/EquiposFilter';
 import EquiposTable from '../moleculas/EquiposTable';
@@ -22,22 +22,19 @@ const EquiposInfo = ({
   spinAnimationActive,
   fetchEquipos,
 }) => {
-  const [equipos, setEquipos] = useState(filteredEquipos);
-
-  useEffect(() => {
-    setEquipos(filteredEquipos);
-  }, [filteredEquipos]);
-
-  // Función para recargar los equipos después de editar uno
+  // Recarga todos los equipos y actualiza la selección tras la recarga
   const reloadEquipos = async () => {
     await fetchEquipos();
-    // Espera a que filteredEquipos se actualice antes de buscar el equipo actualizado
-    // Esto es necesario porque el estado de filteredEquipos puede no actualizarse inmediatamente
     setTimeout(() => {
-      const updatedEquipo = filteredEquipos.find(e => e.etiquetaEquipo === selectedEquipo.etiquetaEquipo);
-      handleRowClick(updatedEquipo);
-    }, 150);
+      if (selectedEquipo) {
+        const updatedEquipo = filteredEquipos.find(
+          (e) => e.etiquetaEquipo === selectedEquipo.etiquetaEquipo
+        );
+        if (updatedEquipo) handleRowClick(updatedEquipo);
+      }
+    }, 300);
   };
+
   return (
     <div className="equipos-content">
       <div className="equipos-container">
@@ -49,9 +46,11 @@ const EquiposInfo = ({
           setSelectedTipo={setSelectedTipo}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          fetchEquipos={fetchEquipos}
+          reloadEquipos={reloadEquipos}
         />
         <EquiposTable
-          filteredEquipos={equipos}
+          filteredEquipos={filteredEquipos}
           handleRowClick={handleRowClick}
         />
       </div>
