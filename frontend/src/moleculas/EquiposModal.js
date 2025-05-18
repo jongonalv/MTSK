@@ -2,12 +2,14 @@ import React from "react";
 import EquiposForm from "./FormularioEditarEquipos";
 import BotonSinpleRojo from "../atomos/botonSinple";
 
-const EquiposModal = ({ isOpen, onClose, data, onChange, onSave, reloadEquipos }) => {
+const EquiposModal = ({ isOpen, onClose, data, onChange, onSave, reloadEquipos, fetchEquipos }) => {
   if (!isOpen) return null;
 
+  // Función para manejar el evento de guardar
   const handleSave = async () => {
     await onSave();
     reloadEquipos();
+    fetchEquipos();
     onClose();
   };
 

@@ -57,7 +57,7 @@ const EquiposInfo = ({
 
       <div className="detalles-container">
         {selectedEquipo ? (
-          <EquiposDetail equipo={selectedEquipo} reloadEquipos={reloadEquipos} />
+          <EquiposDetail equipo={selectedEquipo} reloadEquipos={reloadEquipos} fetchEquipos={fetchEquipos} />
         ) : (
           <div className="no-selection">
             <p>Selecciona un equipo para ver los detalles.</p>
@@ -71,7 +71,9 @@ const EquiposInfo = ({
           handleRowClick={handleRowClick}
           spinAnimationActive={spinAnimationActive}
         />
-        <EquiposStats />
+        <EquiposStats 
+        fetchEquipos={fetchEquipos}
+        />
       </div>
     </div>
   );

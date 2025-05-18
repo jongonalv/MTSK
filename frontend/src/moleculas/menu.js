@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import './estilos/menu.css';
 import Equipos from '../paginas/Equipos'; // Importando Equipos desde ../organismos/equipos
 import logo from '../resources/logolargo.png'; // Importar la imagen desde la carpeta src
@@ -16,19 +16,21 @@ const Menu = () => {
   };
 
   // Función para obtener los equipos
-  const fetchEquipos = () => {
-    fetch('http://localhost:3001/equipos')
+  const fetchEquipos = useCallback(() => {
+    return fetch('http://localhost:3001/equipos')
       .then((response) => response.json())
       .then((data) => {
         setEquiposData(data);
 
         const sortedEquipos = data.sort((a, b) => new Date(b.fechaCompra) - new Date(a.fechaCompra));
-        setRecentEquipos(sortedEquipos.slice(0, 8)); 
+        setRecentEquipos(sortedEquipos.slice(0, 8));
+        return data; // 👈 importante: para que el componente `EquiposStats` pueda usar los datos
       })
       .catch((error) => {
         console.error('Error al cargar los datos: ', error);
+        return []; // En caso de error, devolvemos array vacío
       });
-  };
+  }, []);
 
   // Llamada inicial
   useEffect(() => {

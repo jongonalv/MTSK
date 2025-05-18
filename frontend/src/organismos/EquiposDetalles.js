@@ -6,7 +6,7 @@ import "./estilos/equipos.css";
 import "./estilos/formPopup.css";
 import "./estilos/equiposDetalles.css"; 
 
-const EquiposDetail = ({ equipo, reloadEquipos }) => {
+const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editableData, setEditableData] = useState({
     etiquetaEquipo: equipo.etiquetaEquipo || "",
@@ -96,6 +96,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
       // Recarga los equipos después de guardar
       setTimeout(() => {
         reloadEquipos();
+        fetchEquipos();
       }, 200);
 
     } catch (error) {
@@ -113,6 +114,7 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
         equipo={editableData} 
         onEquiposUpdated={reloadEquipos}
         reloadEquipos={reloadEquipos}
+        fetchEquipos={fetchEquipos} 
       />
       <EquiposModal 
         isOpen={isModalOpen} 
@@ -120,7 +122,8 @@ const EquiposDetail = ({ equipo, reloadEquipos }) => {
         data={editableData} 
         onChange={handleInputChange} 
         onSave={handleSave} 
-        reloadEquipos={reloadEquipos} 
+        reloadEquipos={reloadEquipos}
+        fetchEquipos={fetchEquipos} 
       />
     </div>
   );

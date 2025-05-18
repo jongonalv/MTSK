@@ -10,7 +10,7 @@ import './estilos/Modal.css';
 import './estilos/AgregarEquipoForm.css';
 
 // Componente BarraFilter que contiene los filtros y el botón para agregar un nuevo equipo
-const BarraFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo, selectedDate, setSelectedDate, fetchEquipos, reloadEquipos}) => {
+const BarraFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo, selectedDate, setSelectedDate, reloadEquipos, fetchEquipos}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Funciones para manejar los cambios en los filtros
