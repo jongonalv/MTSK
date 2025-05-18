@@ -33,24 +33,24 @@
   flex-direction: column;
   gap: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
-  transform: scale(1); /* Escala inicial */
+  transform: scale(1);
 }
 
 /* Ajuste para pantallas pequeñas */
 @media (max-width: 768px) {
   .equipos-main-container {
-    flex-direction: column; /* Cambia la dirección a columna */
+    flex-direction: column;
     padding: 15px;
-    gap: 20px; /* Ajusta el espacio entre contenedores */
+    gap: 20px;
   }
 
   .equipos-content {
     flex-direction: column; /* Cambia la dirección a columna */
-    gap: 20px; /* Ajusta el espacio entre contenedores */
+    gap: 20px;
   }
 
   .equipos-container {
-    width: 100%; /* Contenedores ocupan todo el ancho */
+    width: 100%;
     padding: 20px;
   }
 }

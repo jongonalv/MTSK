@@ -107,7 +107,7 @@ const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {
   return (
     <div>
       <h2 className="fade-in">Detalles del Equipo</h2>
-      <EquiposInfo equipo={editableData} />
+      <EquiposInfo equipo={editableData} fetchEquipos={fetchEquipos} />
       {error && <div className="error-message">{error}</div>}
       <EquiposButtons 
         setIsModalOpen={setIsModalOpen} 

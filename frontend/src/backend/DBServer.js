@@ -69,29 +69,72 @@ app.get('/usuarios', (req, res) => {
     });
 });
 
+// Ruta para obtener los últimos movimientos
+app.get('/movimientos', (req, res) => {
+    // Puedes limitar a los últimos 10 movimientos, por ejemplo
+    const sqlQuery = `
+        SELECT ID_Movimiento, etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario
+        FROM movimiento
+        ORDER BY fecha DESC
+        LIMIT 10
+    `;
+    db.query(sqlQuery, (err, results) => {
+        if (err) {
+            console.error('Error al obtener movimientos:', err);
+            res.status(500).json({ error: 'Error al obtener movimientos' });
+            return;
+        }
+        // Formatea la fecha a YYYY-MM-DD HH:mm
+        results.forEach(mov => {
+            if (mov.fecha) {
+                const d = new Date(mov.fecha);
+                mov.fecha = d.toISOString().replace('T', ' ').substring(0, 16);
+            }
+        });
+        res.json(results);
+    });
+});
+
 // Ruta para asignar un usuario a un equipo
 app.post('/equipo/:etiquetaEquipo/asignar', (req, res) => {
     const { etiquetaEquipo } = req.params;
     const { usuario } = req.body;
 
-    const deleteQuery = `DELETE FROM equipo_has_usuario WHERE etiquetaEquipo = ?`;
-    const insertQuery = `INSERT INTO equipo_has_usuario (etiquetaEquipo, Usuario) VALUES (?, ?)`;
+    // Actualiza el usuario asignado al equipo
+    const updateQuery = `
+        INSERT INTO equipo_has_usuario (etiquetaEquipo, Usuario)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE Usuario = VALUES(Usuario)
+    `;
 
-    db.query(deleteQuery, [etiquetaEquipo], (err, result) => {
+    db.query(updateQuery, [etiquetaEquipo, usuario], (err) => {
         if (err) {
-            console.error('Error al eliminar registros previos: ', err);
-            res.status(500).send('Error al asignar el usuario al equipo');
-            return;
+            console.error('Error al asignar usuario:', err);
+            return res.status(500).json({ error: 'Error al asignar usuario' });
         }
 
-        db.query(insertQuery, [etiquetaEquipo, usuario], (err, result) => {
-            if (err) {
-                console.error('Error al insertar nuevo usuario: ', err);
-                res.status(500).send('Error al asignar el usuario al equipo');
-                return;
-            }
+        // Obtener el nombre del usuario para el comentario
+        db.query('SELECT Nombre FROM usuario WHERE Usuario = ?', [usuario], (err, results) => {
+            const nombreUsuario = results && results[0] ? results[0].Nombre : usuario;
+            const comentario = `Se ha asignado el equipo ${etiquetaEquipo} a ${nombreUsuario}`;
+            const tipoMovimiento = 'Asignar usuario';
+            const fecha = new Date();
 
-            res.send('Usuario asignado correctamente');
+            // Insertar movimiento
+            const movimientoQuery = `
+                INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+            db.query(
+                movimientoQuery,
+                [etiquetaEquipo, usuario, fecha, tipoMovimiento, comentario],
+                (err) => {
+                    if (err) {
+                        console.error('Error al registrar movimiento:', err);
+                    }
+                    return res.json({ success: true });
+                }
+            );
         });
     });
 });
@@ -125,16 +168,34 @@ app.post('/agregarEquipo', (req, res) => {
                     });
                 }
 
-                db.commit(err => {
+                // Insertar movimiento de alta de equipo
+                const tipoMovimiento = 'Alta equipo';
+                const comentario = `Se ha agregado el equipo ${etiquetaEquipo} (${marca} ${modelo} al inventario)`;
+                const fecha = new Date();
+
+                const sqlMovimiento = `
+                    INSERT INTO movimiento (etiquetaProducto, fecha, tipoMovimiento, Comentario)
+                    VALUES (?, ?, ?, ?)
+                `;
+                db.query(sqlMovimiento, [etiquetaEquipo, fecha, tipoMovimiento, comentario], (err) => {
                     if (err) {
                         return db.rollback(() => {
-                            console.error('Error al confirmar la transacción:', err);
-                            res.status(500).json({ error: 'Error al confirmar la transacción' });
+                            console.error('Error al insertar movimiento:', err);
+                            res.status(500).json({ error: 'Error al registrar el movimiento' });
                         });
                     }
 
-                    console.log('Producto y equipo insertados correctamente. Resultados:', result);
-                    res.status(201).json({ message: 'Producto y equipo insertados correctamente' });
+                    db.commit(err => {
+                        if (err) {
+                            return db.rollback(() => {
+                                console.error('Error al confirmar la transacción:', err);
+                                res.status(500).json({ error: 'Error al confirmar la transacción' });
+                            });
+                        }
+
+                        console.log('Producto, equipo y movimiento insertados correctamente.');
+                        res.status(201).json({ message: 'Producto, equipo y movimiento insertados correctamente' });
+                    });
                 });
             });
         });
@@ -155,8 +216,44 @@ app.put('/updateEquipo', (req, res) => {
             res.status(500).json({ error: 'Error al actualizar el equipo', details: err });
             return;
         }
-        console.log('Equipo actualizado correctamente. Resultados:', result);
-        res.json({ message: 'Equipo actualizado correctamente' });
+
+        // Comprobar si el equipo tiene usuario asignado
+        const sqlUsuario = `SELECT Usuario FROM equipo_has_usuario WHERE etiquetaEquipo = ? LIMIT 1`;
+        db.query(sqlUsuario, [etiquetaEquipo], (err, usuarioResult) => {
+            if (err) {
+                console.error('Error al comprobar usuario asignado:', err);
+                res.status(500).json({ error: 'Error al comprobar usuario asignado', details: err });
+                return;
+            }
+
+            let usuario = null;
+            if (usuarioResult && usuarioResult.length > 0 && usuarioResult[0].Usuario) {
+                usuario = usuarioResult[0].Usuario;
+            }
+
+            // Insertar movimiento de edición
+            const tipoMovimiento = 'Editar equipo';
+            const fecha = new Date();
+
+            // Obtener el nombre del usuario para el comentario
+            const comentario = usuario
+                ? `Se ha editado el equipo ${etiquetaEquipo} (usuario asignado: ${usuario})`
+                : `Se ha editado el equipo ${etiquetaEquipo}`;
+
+            // Insertar movimiento
+            const sqlMovimiento = `
+                INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+            db.query(sqlMovimiento, [etiquetaEquipo, usuario, fecha, tipoMovimiento, comentario], (err) => {
+                if (err) {
+                    console.error('Error al registrar movimiento de edición:', err);
+                    // No bloquea la respuesta principal
+                }
+                console.log('Equipo actualizado correctamente. Resultados:', result);
+                res.json({ message: 'Equipo actualizado correctamente' });
+            });
+        });
     });
 });
 
@@ -183,7 +280,6 @@ app.put('/updateProducto', (req, res) => {
 });
 
 // Ruta para eliminar datos de equipo y producto
-
 app.delete('/equipo/:etiquetaEquipo', (req, res) => {
     const { etiquetaEquipo } = req.params;
 
@@ -194,34 +290,72 @@ app.delete('/equipo/:etiquetaEquipo', (req, res) => {
             return;
         }
 
-        const sqlDeleteEquipo = `DELETE FROM equipo WHERE etiquetaEquipo = ?`;
-        db.query(sqlDeleteEquipo, [etiquetaEquipo], (err, result) => {
+        // Obtener usuario asignado antes de eliminar
+        const sqlUsuario = `SELECT Usuario FROM equipo_has_usuario WHERE etiquetaEquipo = ? LIMIT 1`;
+        db.query(sqlUsuario, [etiquetaEquipo], (err, usuarioResult) => {
             if (err) {
                 return db.rollback(() => {
-                    console.error('Error al eliminar equipo:', err);
-                    res.status(500).json({ error: 'Error al eliminar el equipo' });
+                    console.error('Error al obtener usuario asignado:', err);
+                    res.status(500).json({ error: 'Error al obtener usuario asignado' });
                 });
             }
 
-            const sqlDeleteProducto = `DELETE FROM producto WHERE etiqueta = ?`;
-            db.query(sqlDeleteProducto, [etiquetaEquipo], (err, result) => {
+            let usuario = null;
+            if (usuarioResult && usuarioResult.length > 0 && usuarioResult[0].Usuario) {
+                usuario = usuarioResult[0].Usuario;
+            }
+
+            // Insertar movimiento de eliminación antes de borrar los datos
+            const tipoMovimiento = 'Eliminar equipo';
+            const fecha = new Date();
+            const comentario = usuario
+                ? `Se ha eliminado el equipo ${etiquetaEquipo} (usuario asignado: ${usuario})`
+                : `Se ha eliminado el equipo ${etiquetaEquipo}`;
+
+            const sqlMovimiento = `
+                INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+            db.query(sqlMovimiento, [etiquetaEquipo, usuario, fecha, tipoMovimiento, comentario], (err) => {
                 if (err) {
                     return db.rollback(() => {
-                        console.error('Error al eliminar producto:', err);
-                        res.status(500).json({ error: 'Error al eliminar el producto' });
+                        console.error('Error al registrar movimiento de eliminación:', err);
+                        res.status(500).json({ error: 'Error al registrar el movimiento' });
                     });
                 }
 
-                db.commit(err => {
+                // Eliminar equipo
+                const sqlDeleteEquipo = `DELETE FROM equipo WHERE etiquetaEquipo = ?`;
+                db.query(sqlDeleteEquipo, [etiquetaEquipo], (err, result) => {
                     if (err) {
                         return db.rollback(() => {
-                            console.error('Error al confirmar la transacción:', err);
-                            res.status(500).json({ error: 'Error al confirmar la transacción' });
+                            console.error('Error al eliminar equipo:', err);
+                            res.status(500).json({ error: 'Error al eliminar el equipo' });
                         });
                     }
 
-                    console.log('Equipo y producto eliminados correctamente. Resultados:', result);
-                    res.json({ message: 'Equipo y producto eliminados correctamente' });
+                    // Eliminar producto
+                    const sqlDeleteProducto = `DELETE FROM producto WHERE etiqueta = ?`;
+                    db.query(sqlDeleteProducto, [etiquetaEquipo], (err, result) => {
+                        if (err) {
+                            return db.rollback(() => {
+                                console.error('Error al eliminar producto:', err);
+                                res.status(500).json({ error: 'Error al eliminar el producto' });
+                            });
+                        }
+
+                        db.commit(err => {
+                            if (err) {
+                                return db.rollback(() => {
+                                    console.error('Error al confirmar la transacción:', err);
+                                    res.status(500).json({ error: 'Error al confirmar la transacción' });
+                                });
+                            }
+
+                            console.log('Equipo, producto y movimiento de eliminación registrados correctamente.');
+                            res.json({ message: 'Equipo, producto y movimiento de eliminación registrados correctamente' });
+                        });
+                    });
                 });
             });
         });

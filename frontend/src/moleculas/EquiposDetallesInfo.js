@@ -54,22 +54,23 @@ const getValue = (key, equipo, usuario) => {
 
 // Componente para mostrar la información de los equipos
 // Recibe un objeto "equipo" y un objeto "usuario" como props
-const EquiposInfo = ({ equipo, usuario }) => (
-  <div className="detalles-content">
-    {orderedKeys.map((key) => (
-      <div
-        key={key}
-        className={`detalle-item ${
-          key === "etiquetaEquipo" || key === "usuario" ? "highlight" : ""
-        }`}
-      >
-        <strong className="detalle-label">
-          {attributeNames[key] || key.replace(/([A-Z])/g, " $1")}:
-        </strong>
-        <span className="detalle-value">{getValue(key, equipo, usuario)}</span>
-      </div>
-    ))}
-  </div>
-);
+const EquiposInfo = ({ equipo, usuario }) => {
+
+  return (
+    <div className="detalles-content">
+      {orderedKeys.map((key) => (
+        <div
+          key={key}
+          className={`detalle-item ${key === "etiquetaEquipo" || key === "usuario" ? "highlight" : ""}`}
+        >
+          <strong className="detalle-label">
+            {attributeNames[key] || key.replace(/([A-Z])/g, " $1")}:
+          </strong>
+          <span className="detalle-value">{getValue(key, equipo, usuario)}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default EquiposInfo;

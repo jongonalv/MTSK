@@ -1,12 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import './estilos/menu.css';
-import Equipos from '../paginas/Equipos'; // Importando Equipos desde ../organismos/equipos
+import Equipos from '../paginas/Equipos';
+import Inicio from '../paginas/Inicio'; // Importando Equipos desde ../organismos/equipos
 import logo from '../resources/logolargo.png'; // Importar la imagen desde la carpeta src
 
 const Menu = () => {
 
   // Estados
-  const [selectedComponent, setSelectedComponent] = useState('inicio');
+  const [selectedComponent, setSelectedComponent] = useState('equipos');
   const [equiposData, setEquiposData] = useState([]);
   const [recentEquipos, setRecentEquipos] = useState([]);
 
@@ -46,7 +47,6 @@ const Menu = () => {
 
         <ul className="menu-list">
           <li className="menu-item" onClick={() => handleMenuClick('inicio')}>Inicio</li>
-          <li className="menu-item" onClick={() => handleMenuClick('nuevo-movimiento')}>Nuevo Movimiento</li>
           <li className="menu-item" onClick={() => handleMenuClick('equipos')}>Equipos</li>
           <li className="menu-item" onClick={() => handleMenuClick('impresoras')}>Impresoras</li>
           <li className="menu-item" onClick={() => handleMenuClick('accesorios')}>Accesorios</li>
@@ -58,7 +58,7 @@ const Menu = () => {
 
       {/* Renderizado de los componentes basados en el estado */}
       {selectedComponent === 'equipos' && <Equipos equiposData={equiposData} recentEquipos={recentEquipos} fetchEquipos={fetchEquipos} />}
-      {selectedComponent === 'inicio' && <h1>Inicio</h1>}
+      {selectedComponent === 'inicio' && <h1><Inicio/></h1>}
       {selectedComponent === 'nuevo-movimiento' && <h1>Nuevo Movimiento</h1>}
       {selectedComponent === 'impresoras' && <h1>Impresoras</h1>}
       {selectedComponent === 'accesorios' && <h1>Accesorios</h1>}
