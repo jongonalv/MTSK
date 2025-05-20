@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../db');
 
 exports.getSiguienteEtiqueta = (req, res) => {
     const { prefijo } = req.query;
@@ -26,6 +26,7 @@ exports.getSiguienteEtiqueta = (req, res) => {
             }
             siguienteNumero = usados.length + 1;
         }
+
         res.json({ siguienteNumero: siguienteNumero.toString().padStart(3, '0') });
     });
 };

@@ -1,39 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./config/database');
-
-// Importar rutas
-const equiposRoutes = require('./routes/equiposRoutes');
-const usuariosRoutes = require('./routes/usuariosRoutes');
-const movimientosRoutes = require('./routes/movimientosRoutes');
-const etiquetasRoutes = require('./routes/etiquetasRoutes');
-
-// Crear la aplicación express
+const express = require("express");
+const cors = require("cors");
 const app = express();
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Conexión a la base de datos
-db.connect(err => {
-    if (err) {
-        console.error('Error de conexión con la base de datos: ', err);
-        process.exit(1);
-    }
-    console.log('Conexión realizada correctamente.');
-});
-
 // Rutas
-app.use('/equipos', equiposRoutes);
-app.use('/usuarios', usuariosRoutes);
-app.use('/movimientos', movimientosRoutes);
-app.use('/etiquetas', etiquetasRoutes);
+app.use('/equipos', require('./routes/equipos'));
+app.use('/usuarios', require('./routes/usuarios'));
+app.use('/movimientos', require('./routes/movimientos'));
+app.use('/siguienteEtiqueta', require('./routes/etiquetas'));
 
-// Manejador de errores
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Algo salió mal!' });
+// Servidor
+app.listen(3001, () => {
+    console.debug('Servidor corriendo en el puerto 3001');
 });
-
-module.exports = app;

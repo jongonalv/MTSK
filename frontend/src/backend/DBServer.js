@@ -11,7 +11,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'mysql',
+    password: 'Ingl@terra_24$',
     database: 'mtsk_version1',
     port: 3306
 });
@@ -100,41 +100,86 @@ app.post('/equipo/:etiquetaEquipo/asignar', (req, res) => {
     const { etiquetaEquipo } = req.params;
     const { usuario } = req.body;
 
-    // Actualiza el usuario asignado al equipo
-    const updateQuery = `
-        INSERT INTO equipo_has_usuario (etiquetaEquipo, Usuario)
-        VALUES (?, ?)
-        ON DUPLICATE KEY UPDATE Usuario = VALUES(Usuario)
-    `;
-
-    db.query(updateQuery, [etiquetaEquipo, usuario], (err) => {
+    db.beginTransaction((err) => {
         if (err) {
-            console.error('Error al asignar usuario:', err);
-            return res.status(500).json({ error: 'Error al asignar usuario' });
+            console.error('Error al iniciar la transacción:', err);
+            return res.status(500).json({ error: 'Error al iniciar la transacción' });
         }
 
-        // Obtener el nombre del usuario para el comentario
-        db.query('SELECT Nombre FROM usuario WHERE Usuario = ?', [usuario], (err, results) => {
-            const nombreUsuario = results && results[0] ? results[0].Nombre : usuario;
-            const comentario = `Se ha asignado el equipo ${etiquetaEquipo} a ${nombreUsuario}`;
-            const tipoMovimiento = 'Asignar usuario';
-            const fecha = new Date();
+        // Eliminar el usuario previamente asignado al equipo
+        const deleteQuery = `
+            DELETE FROM equipo_has_usuario
+            WHERE etiquetaEquipo = ?
+        `;
 
-            // Insertar movimiento
-            const movimientoQuery = `
-                INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
-                VALUES (?, ?, ?, ?, ?)
+        db.query(deleteQuery, [etiquetaEquipo], (err) => {
+            if (err) {
+                console.error('Error al eliminar usuario asignado:', err);
+                return db.rollback(() => {
+                    res.status(500).json({ error: 'Error al eliminar usuario asignado' });
+                });
+            }
+
+            // Insertar el nuevo usuario asignado al equipo
+            const insertQuery = `
+                INSERT INTO equipo_has_usuario (etiquetaEquipo, Usuario)
+                VALUES (?, ?)
             `;
-            db.query(
-                movimientoQuery,
-                [etiquetaEquipo, usuario, fecha, tipoMovimiento, comentario],
-                (err) => {
-                    if (err) {
-                        console.error('Error al registrar movimiento:', err);
-                    }
-                    return res.json({ success: true });
+
+            db.query(insertQuery, [etiquetaEquipo, usuario], (err) => {
+                if (err) {
+                    console.error('Error al asignar usuario:', err);
+                    return db.rollback(() => {
+                        res.status(500).json({ error: 'Error al asignar usuario' });
+                    });
                 }
-            );
+
+                // Obtener el nombre del usuario para el comentario
+                db.query('SELECT Nombre FROM usuario WHERE Usuario = ?', [usuario], (err, results) => {
+                    if (err) {
+                        console.error('Error al obtener el nombre del usuario:', err);
+                        return db.rollback(() => {
+                            res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
+                        });
+                    }
+
+                    const nombreUsuario = results && results[0] ? results[0].Nombre : usuario;
+                    const comentario = `Se ha asignado el equipo ${etiquetaEquipo} a ${nombreUsuario}`;
+                    const tipoMovimiento = 'Asignar usuario';
+                    const fecha = new Date();
+
+                    // Insertar movimiento
+                    const movimientoQuery = `
+                        INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
+                        VALUES (?, ?, ?, ?, ?)
+                    `;
+
+                    db.query(
+                        movimientoQuery,
+                        [etiquetaEquipo, usuario, fecha, tipoMovimiento, comentario],
+                        (err) => {
+                            if (err) {
+                                console.error('Error al registrar movimiento:', err);
+                                return db.rollback(() => {
+                                    res.status(500).json({ error: 'Error al registrar movimiento' });
+                                });
+                            }
+
+                            // Confirmar la transacción
+                            db.commit((err) => {
+                                if (err) {
+                                    console.error('Error al confirmar la transacción:', err);
+                                    return db.rollback(() => {
+                                        res.status(500).json({ error: 'Error al confirmar la transacción' });
+                                    });
+                                }
+
+                                res.json({ success: true, message: 'Usuario asignado correctamente' });
+                            });
+                        }
+                    );
+                });
+            });
         });
     });
 });

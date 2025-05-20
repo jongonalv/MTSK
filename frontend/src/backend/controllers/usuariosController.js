@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../db');
 
 exports.getUsuarios = (req, res) => {
     const sqlQuery = 'SELECT Usuario, Nombre FROM usuario';

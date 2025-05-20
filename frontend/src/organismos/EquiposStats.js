@@ -56,12 +56,12 @@ const EquiposStats = ({ fetchEquipos }) => {
 
     // ESTA BUGEADO, MEJORAR EN EL FUTURO EL PARPADEO QUE GENERA LA ACTUALIZACION DE DATOS
     // Configurar un intervalo para actualizar las estadísticas cada 10 segundos
-    //const intervalo = setInterval(() => {
-      //actualizarEstadisticas();
-    //}, 10000);
+    const intervalo = setInterval(() => {
+      actualizarEstadisticas();
+    }, 100000);
 
     // Limpiar el intervalo al desmontar el componente
-    //return () => clearInterval(intervalo);
+    return () => clearInterval(intervalo);
   }, []);
 
 

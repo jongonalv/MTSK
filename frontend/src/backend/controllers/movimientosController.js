@@ -1,6 +1,6 @@
-const db = require('../config/database');
+const db = require('../db');
 
-exports.getMovimientos = (req, res) => {
+exports.getUltimosMovimientos = (req, res) => {
     const sqlQuery = `
         SELECT ID_Movimiento, etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario
         FROM movimiento
@@ -13,13 +13,14 @@ exports.getMovimientos = (req, res) => {
             res.status(500).json({ error: 'Error al obtener movimientos' });
             return;
         }
-        
+
         results.forEach(mov => {
             if (mov.fecha) {
                 const d = new Date(mov.fecha);
                 mov.fecha = d.toISOString().replace('T', ' ').substring(0, 16);
             }
         });
+
         res.json(results);
     });
 };

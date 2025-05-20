@@ -8,7 +8,7 @@ const App = () => {
     <div className='App'>
       <Menu />
       <div>
-      <p className="arcoiris-text">© {new Date().getFullYear()} JONMANGO TODOS LOS DERECHOS RESERVADOS</p>
+      <p className="arcoiris-text">© {new Date().getFullYear()} MANGOLOKO TODOS LOS DERECHOS RESERVADOS</p>
       </div>
     </div>
   );
