@@ -10,11 +10,12 @@ import {
   FaBoxOpen,
   FaClipboardList,
   FaChartPie,
-  FaMicrochip,
-  FaMemory,
-  FaHdd
+  FaTrashAlt // <-- Añadido para icono de eliminar
 } from 'react-icons/fa';
 import { BsGearFill } from 'react-icons/bs';
+import MetricCard from '../componentes_inicio/MetricCard';
+import WidgetCard from '../componentes_inicio/WidgetCard';
+import QuickActions from '../componentes_inicio/QuickActions';
 import './estilos/inicio.css';
 
 const Inicio = () => {
@@ -123,22 +124,22 @@ const Inicio = () => {
     .slice(0, 5);
 
   return (
-    <div className="dashboard">
+    <div className="mtsk-dashboard">
       {/* Encabezado */}
-      <header className="dashboard-header">
+      <header className="mtsk-dashboard__header">
         <div>
-          <h1 className="dashboard-title">Panel de Control MTSK</h1>
-          <p className="dashboard-subtitle">Gestión de equipos tecnológicos</p>
+          <h1 className="mtsk-dashboard__title">Panel de Control MTSK</h1>
+          <p className="mtsk-dashboard__subtitle">Gestión de equipos tecnológicos</p>
         </div>
-        <div className="dashboard-header-actions">
-          <button className="btn btn-secondary">
+        <div className="mtsk-dashboard__header-actions">
+          <button className="mtsk-btn mtsk-btn--secondary">
             <BsGearFill /> Configuración
           </button>
         </div>
       </header>
 
       {/* Métricas principales */}
-      <section className="metrics-grid">
+      <section className="mtsk-metrics-grid">
         <MetricCard 
           icon={<FaLaptop />} 
           title="Total Equipos" 
@@ -162,15 +163,23 @@ const Inicio = () => {
         />
         <MetricCard 
           icon={<FaBoxOpen />} 
-          title="Disponibles" 
-          value={loading ? '...' : stats.equiposDisponibles} 
+          title="Equipos Backup" 
+          value={
+            loading
+              ? '...'
+              : (
+                  (stats.tiposEquipos?.Backup || 0) +
+                  (stats.tiposEquipos?.backup || 0) +
+                  (stats.tiposEquipos?.BACKUP || 0)
+                )
+          }
           loading={loading}
           color="warning"
         />
       </section>
 
       {/* Contenido principal */}
-      <section className="content-grid">
+      <section className="mtsk-content-grid">
         <WidgetCard 
           icon={<FaListUl />} 
           title="Últimos equipos agregados" 
@@ -178,14 +187,14 @@ const Inicio = () => {
           data={ultimosEquipos} 
           emptyMessage="No hay equipos registrados"
           renderItem={(eq) => (
-            <div className="widget-item">
-              <div className="widget-item-icon">
+            <div className="mtsk-widget-item">
+              <div className="mtsk-widget-item__icon">
                 <FaLaptop />
               </div>
-              <div className="widget-item-content">
+              <div className="mtsk-widget-item__content">
                 <strong>{eq.etiquetaEquipo}</strong>
                 <span>{eq.tipo} • {eq.procesador}</span>
-                <div className="widget-item-meta">
+                <div className="mtsk-widget-item__meta">
                   <span>{eq.memoriaRAM} RAM • {eq.discoDuro}</span>
                   <span>{new Date(eq.fechaCompra).toLocaleDateString()}</span>
                 </div>
@@ -195,23 +204,23 @@ const Inicio = () => {
           footerLink="#/equipos"
           footerText="Ver todos los equipos"
         />
-        
+
         <WidgetCard 
           icon={<FaChartPie />} 
           title="Distribución por tipo" 
           loading={loading} 
           isChart={true}
         >
-          <div className="chart-container">
+          <div className="mtsk-chart-container">
             {stats.tiposEquipos && Object.entries(stats.tiposEquipos).map(([tipo, count]) => (
-              <div key={tipo} className="chart-item">
-                <div className="chart-label">
+              <div key={tipo} className="mtsk-chart-item">
+                <div className="mtsk-chart-label">
                   <span>{tipo}</span>
                   <span>{count} ({Math.round((count / stats.totalEquipos) * 100)}%)</span>
                 </div>
-                <div className="chart-bar-container">
+                <div className="mtsk-chart-bar-container">
                   <div 
-                    className="chart-bar" 
+                    className="mtsk-chart-bar" 
                     style={{
                       width: `${(count / stats.totalEquipos) * 100}%`,
                       backgroundColor: getColorForType(tipo)
@@ -223,7 +232,6 @@ const Inicio = () => {
           </div>
         </WidgetCard>
 
-        
         <WidgetCard 
           icon={<FaHistory />} 
           title="Actividad reciente" 
@@ -231,17 +239,17 @@ const Inicio = () => {
           data={movimientos} 
           emptyMessage="No hay actividad reciente"
           renderItem={(mov) => (
-            <div className="activity-item">
-              <div className={`activity-icon ${mov.tipoMovimiento.toLowerCase()}`}>
+            <div className="mtsk-activity-item">
+              <div className={`mtsk-activity-icon ${mov.tipoMovimiento?.toLowerCase()}`}>
                 {getActivityIcon(mov.tipoMovimiento)}
               </div>
-              <div className="activity-content">
-                <div className="activity-header">
+              <div className="mtsk-activity-content">
+                <div className="mtsk-activity-header">
                   <strong>{mov.tipoMovimiento}</strong>
                   <time>{new Date(mov.fecha).toLocaleString()}</time>
                 </div>
-                <p className="activity-details">{mov.Comentario}</p>
-                <div className="activity-meta">
+                <p className="mtsk-activity-details">{mov.Comentario}</p>
+                <div className="mtsk-activity-meta">
                   {mov.equipo && <span>Equipo: {mov.equipo}</span>}
                   {mov.usuario && <span>Usuario: {mov.usuario}</span>}
                 </div>
@@ -249,9 +257,9 @@ const Inicio = () => {
             </div>
           )}
           footerLink="#/movimientos"
-          footerText="Ver historial completo"
+          footerText={<span className="mtsk-widget-footer-link--small">Ver historial completo</span>}
         />
-        
+
         <QuickActions />
       </section>
     </div>
@@ -260,14 +268,20 @@ const Inicio = () => {
 
 // Helper para obtener icono de actividad
 const getActivityIcon = (tipo) => {
-  switch(tipo) {
-    case 'Asignación': return <FaClipboardList />;
-    case 'Mantenimiento': return <FaClipboardList />;
-    case 'Reubicación': return <FaClipboardList />;
+  if (!tipo) return <FaClipboardList />;
+  const t = tipo.trim().toLowerCase();
+  switch(t) {
+    case 'editar equipo': return <FaClipboardList />;
+    case 'alta equipo': return <FaPlusCircle />;
+    case 'asignar usuario': return <FaUsers />;
+    case 'eliminar equipo': return <FaTrashAlt />; // Cambiado a un icono más guay
+    // Añade variantes si llegan con "de" en medio
+    case 'alta de equipo': return <FaPlusCircle />;
+    case 'asignar usuario': return <FaUsers />;
+    case 'eliminar equipo': return <FaTrashAlt />; // Cambiado aquí también
     default: return <FaClipboardList />;
   }
 };
-
 // Helper para obtener color por tipo de equipo
 const getColorForType = (tipo) => {
   const colors = {
@@ -280,133 +294,5 @@ const getColorForType = (tipo) => {
   };
   return colors[tipo] || '#6c757d';
 };
-
-// Componente para tarjetas de métricas
-const MetricCard = ({ icon, title, value, loading, color }) => (
-  <div className={`metric-card ${color}`}>
-    <div className="metric-icon">{icon}</div>
-    <div className="metric-content">
-      <h3 className="metric-title">{title}</h3>
-      <div className="metric-value">
-        {loading ? <div className="loading-bar"></div> : value}
-      </div>
-    </div>
-  </div>
-);
-
-// Componente para tarjetas de widgets
-const WidgetCard = ({ icon, title, loading, data, emptyMessage, renderItem, footerLink, footerText, isChart, isSpecs, children }) => (
-  <div className={`widget-card ${isChart ? 'chart-widget' : ''} ${isSpecs ? 'specs-widget' : ''}`}>
-    <div className="widget-header">
-      <div className="widget-icon">{icon}</div>
-      <h3 className="widget-title">{title}</h3>
-    </div>
-    <div className="widget-body">
-      {loading ? (
-        <div className="loading-state">
-          <div className="loading-bar"></div>
-          <div className="loading-bar"></div>
-          <div className="loading-bar"></div>
-        </div>
-      ) : isChart || isSpecs ? (
-        children
-      ) : (!data || data.length === 0) ? (
-        <div className="empty-state">
-          <p>{emptyMessage}</p>
-        </div>
-      ) : (
-        <div className="widget-list">
-          {data.map((item, index) => (
-            <div key={index} className="widget-list-item">
-              {renderItem(item)}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-    {footerLink && (
-      <div className="widget-footer">
-        <a href={footerLink} className="widget-footer-link">
-          {footerText} <FaArrowRight />
-        </a>
-      </div>
-    )}
-  </div>
-);
-
-// Componente para especificaciones técnicas
-const SpecCard = ({ icon, title, data, emptyMessage }) => (
-  <div className="spec-card">
-    <div className="spec-header">
-      <div className="spec-icon">{icon}</div>
-      <h4>{title}</h4>
-    </div>
-    <div className="spec-content">
-      {!data || Object.keys(data).length === 0 ? (
-        <p className="empty-spec">{emptyMessage}</p>
-      ) : (
-        <ul className="spec-list">
-          {Object.entries(data)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5)
-            .map(([spec, count]) => (
-              <li key={spec}>
-                <span className="spec-name">{spec}</span>
-                <span className="spec-count">{count}</span>
-              </li>
-            ))}
-        </ul>
-      )}
-    </div>
-  </div>
-);
-
-// Componente para acciones rápidas
-const QuickActions = () => (
-  <div className="widget-card quick-actions">
-    <div className="widget-header">
-      <div className="widget-icon">
-        <FaPlusCircle />
-      </div>
-      <h3 className="widget-title">Acciones rápidas</h3>
-    </div>
-    <div className="widget-body">
-      <div className="actions-grid">
-        <QuickAction 
-          link="#/agregar-equipo" 
-          icon={<FaLaptop />} 
-          text="Agregar equipo" 
-          color="primary"
-        />
-        <QuickAction 
-          link="#/registrar-usuario" 
-          icon={<FaUsers />} 
-          text="Registrar usuario" 
-          color="success"
-        />
-        <QuickAction 
-          link="#/asignar-equipo" 
-          icon={<FaClipboardList />} 
-          text="Asignar equipo" 
-          color="warning"
-        />
-        <QuickAction 
-          link="#/reportes" 
-          icon={<FaBoxOpen />} 
-          text="Generar reporte" 
-          color="info"
-        />
-      </div>
-    </div>
-  </div>
-);
-
-// Componente para una acción rápida
-const QuickAction = ({ link, icon, text, color }) => (
-  <a href={link} className={`action-item ${color}`}>
-    <div className="action-icon">{icon}</div>
-    <span className="action-text">{text}</span>
-  </a>
-);
 
 export default Inicio;
