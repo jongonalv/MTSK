@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaPlusCircle, FaLaptop, FaUsers, FaClipboardList, FaBoxOpen } from 'react-icons/fa';
-import QuickAction from './QuickAction';
+import QuickAction from '../moleculas/componentes_inicio/QuickAction';
 
 const QuickActions = () => (
   <div className="mtsk-widget-card mtsk-quick-actions">

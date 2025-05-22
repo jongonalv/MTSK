@@ -1,146 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './estilos/AgregarEquipoForm.css';
-import BotonAgregar from '../atomos/agregarButton'; // Importar el componente
+import BotonAgregar from '../atomos/agregarButton';
+import { useAgregarEquipoForm } from '../hooks/useAgregarEquipoForm';
 
-const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos}) => {
+const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
+  const {
+    formData,
+    errors,
+    message,
+    handleChange,
+    handleSubmit
+  } = useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos });
 
-  // Estado para almacenar los datos del formulario
-  const [formData, setFormData] = useState({
-    etiquetaEquipo: '',
-    tipo: 'PORTATIL',
-    esBackup: false,
-    marca: '',
-    modelo: '',
-    procesador: '',
-    ram: '8GB',
-    discoDuro: '',
-    numeroSerie: '',
-    numeroPedido: '',
-    fechaCompra: '',
-    garantia: '',
-    empresa: 'AG Legazpi',
-    sistemaOperativo: 'Windows 10',
-  });
-
-  // constante para generar la etiqueta del equipo en base al tipo y empresa
-  const getEtiquetaPrefix = (tipo, empresa, esBackup) => {
-    let prefix = '';
-    if (tipo === 'PORTATIL') prefix = 'P';
-    else if (tipo === 'WORKSTATION') prefix = 'W';
-    else if (tipo === 'SOBREMESA') prefix = 'S';
-
-    // Si es Backup, añade la B después del prefijo
-    if (esBackup) prefix = prefix[0] + 'B' + prefix.slice(1);
-
-    if (empresa === 'HT Legazpi') prefix += 'HT';
-    else if (empresa === 'AG Legazpi' || empresa === 'Rozalma') prefix += 'AG';
-
-    return prefix;
-  };
-
-  // Hook para generar la etiqueta del equipo al cargar el componente
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const generarEtiqueta = async () => {
-        const prefix = getEtiquetaPrefix(formData.tipo, formData.empresa, formData.esBackup);
-        if (!prefix) return;
-        try {
-          const res = await fetch(`http://localhost:3001/siguienteEtiqueta?prefijo=${prefix}`);
-          const data = await res.json();
-          setFormData(f => ({ ...f, etiquetaEquipo: `${prefix}${data.siguienteNumero}` }));
-        } catch (err) {
-          setFormData(f => ({ ...f, etiquetaEquipo: '' }));
-        }
-      };
-      generarEtiqueta();
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [formData.tipo, formData.empresa, formData.esBackup]);
-
-
-
-  const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState('');
-
-  // Función para manejar los cambios en los campos del formulario
-  // Actualiza el estado del formulario y limpia los errores si existen
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
-    }
-  };
-
-  // Validar el formulario, comprueba que los campos requeridos no estén vacíos
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.etiquetaEquipo) newErrors.etiquetaEquipo = 'La etiqueta de equipo es requerida';
-    if (!formData.marca) newErrors.marca = 'La marca es requerida';
-    if (!formData.modelo) newErrors.modelo = 'El modelo es requerido';
-    if (!formData.procesador) newErrors.procesador = 'El procesador es requerido';
-    if (!formData.discoDuro) newErrors.discoDuro = 'El disco duro es requerido';
-    if (!formData.numeroSerie) newErrors.numeroSerie = 'El número de serie es requerido';
-    if (!formData.numeroPedido) newErrors.numeroPedido = 'El número de pedido es requerido';
-    if (!formData.fechaCompra) newErrors.fechaCompra = 'La fecha de compra es requerida';
-    if (!formData.garantia) newErrors.garantia = 'La garantía es requerida';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-    // Función para enviar el formulario
-    // Se ejecuta al hacer click en el botón de agregar
-    // Envia los datos del formulario al servidor y el equipo se agrega al inventario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      setMessage('Te has marcao un mango, se te ha olvidao algo :)');
-      return;
-    }
-
-    try {
-      // Preparar los datos para enviar
-      const tipoFinal = formData.esBackup ? "BACKUP" : formData.tipo;
-      const { esBackup, ...rest } = formData;
-      const dataToSend = { ...rest, tipo: tipoFinal };
-
-      // Enviar los datos al servidor
-      const response = await fetch('http://localhost:3001/agregarEquipo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend),
-      });
-
-      // Comprobar si la respuesta es exitosa
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error del servidor: ${errorText}`);
-      }
-
-      setMessage('Equipo agregado correctamente');
-
-      // Ejecutar funciones adicionales si están definidas
-      const delayedActions = [fetchEquipos, reloadEquipos];
-      delayedActions.forEach(fn => {
-        if (fn) setTimeout(fn, 100);
-      });
-
-      if (onSubmit) onSubmit(dataToSend);
-
-    } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      setMessage('Error al agregar el equipo');
-    }
-  };
-
-
-  // Renderizar el formulario
   return (
     <form className="form-container" onSubmit={handleSubmit}>
       {/* Sección 1: Información del Equipo */}
@@ -157,25 +28,25 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos}) => {
           />
           {errors.etiquetaEquipo && <span className="error">{errors.etiquetaEquipo}</span>}
         </div>
-      <div className="form-group">
-        <label>Tipo:</label>
-        <select name="tipo" value={formData.tipo} onChange={handleChange}>
-          <option value="PORTATIL">PORTATIL</option>
-          <option value="WORKSTATION">WORKSTATION</option>
-          <option value="SOBREMESA">SOBREMESA</option>
-        </select>
-      </div>
-      <div className="form-group">
-        <label>
-          <input
-            type="checkbox"
-            name="esBackup"
-            checked={formData.esBackup}
-            onChange={handleChange}
-          />
-          ¿Es Backup?
-        </label>
-      </div>
+        <div className="form-group">
+          <label>Tipo:</label>
+          <select name="tipo" value={formData.tipo} onChange={handleChange}>
+            <option value="PORTATIL">PORTATIL</option>
+            <option value="WORKSTATION">WORKSTATION</option>
+            <option value="SOBREMESA">SOBREMESA</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              name="esBackup"
+              checked={formData.esBackup}
+              onChange={handleChange}
+            />
+            ¿Es Backup?
+          </label>
+        </div>
         <div className="form-group">
           <label>Marca:</label>
           <input type="text" name="marca" value={formData.marca} onChange={handleChange} required />
