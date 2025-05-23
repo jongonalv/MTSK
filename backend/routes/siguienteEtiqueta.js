@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/connection");
+const db = require("../db");
 
-// GET /siguienteEtiqueta
-router.get("/siguienteEtiqueta", (req, res) => {
+router.get('/siguienteEtiqueta', (req, res) => {
   const { prefijo } = req.query;
   if (!prefijo) return res.status(400).json({ error: 'Prefijo requerido' });
 
