@@ -3,7 +3,7 @@ import EquiposInfo from "../moleculas/EquiposDetallesInfo";
 import EquiposModal from "../moleculas/EquiposModal";
 import EquiposButtons from "../moleculas/EquiposButtons";
 import "./estilos/equipos.css";
-import "./estilos/formPopup.css";
+import "../moleculas/estilos/Modal.css";
 import "./estilos/equiposDetalles.css"; 
 
 const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {

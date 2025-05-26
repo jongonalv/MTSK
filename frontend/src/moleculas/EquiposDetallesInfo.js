@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-// Nombres de los atributos para mostrar en la interfaz
-const attributeNames = {
+// Objeto de nombres de atributos
+const ATTRIBUTE_NAMES = {
   marca: "Marca",
   modelo: "Modelo",
   etiquetaEquipo: "Etiqueta de equipo",
@@ -18,8 +19,8 @@ const attributeNames = {
   usuario: "Usuario",
 };
 
-// Lista de claves en el orden deseado
-const orderedKeys = [
+// Orden de las claves
+const ORDERED_KEYS = [
   "etiquetaEquipo",
   "usuario",
   "marca",
@@ -36,41 +37,83 @@ const orderedKeys = [
   "sistemaOperativo",
 ];
 
-const getValue = (key, equipo, usuario) => {
-
-  // Formatea la fehca de compra en caso de que sea válida
-  // y devuelve "N/A" en caso de que no lo sea
-  if (key === "fechaCompra" && equipo[key]) {
-    const date = new Date(equipo[key]);
+// Función de formateo de valores
+const formatValue = (key, value, usuario) => {
+  if (key === "fechaCompra" && value) {
+    const date = new Date(value);
     return !isNaN(date) ? date.toISOString().split("T")[0] : "N/A";
   }
 
-  // Devuelve "Sin asignar" en caso de que el usuario no esté asignado
   if (key === "usuario") {
-    return equipo[key] || usuario?.Nombre || usuario?.Usuario || "Sin asignar";
+    return value || usuario?.Nombre || usuario?.Usuario || "Sin asignar";
   }
-  return equipo[key] !== undefined && equipo[key] !== "" ? equipo[key] : "N/A";
+
+  return value !== undefined && value !== "" ? value : "N/A";
 };
 
-// Componente para mostrar la información de los equipos
-// Recibe un objeto "equipo" y un objeto "usuario" como props
-const EquiposInfo = ({ equipo, usuario }) => {
+const EquiposInfo = ({ equipo: initialEquipo, usuario }) => {
+  const [equipo, setEquipo] = useState(initialEquipo || {});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Efecto para cargar datos cuando cambia la etiqueta
+  useEffect(() => {
+    // Si ya tenemos datos iniciales, no hacemos fetch
+    if (initialEquipo && Object.keys(initialEquipo).length > 0) {
+      setEquipo(initialEquipo);
+      return;
+    }
+
+    // Si no hay etiqueta, no hacemos fetch
+    if (!initialEquipo?.etiquetaEquipo) return;
+
+    const fetchEquipoData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`/api/equipos/${initialEquipo.etiquetaEquipo}`);
+        setEquipo(response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching equipo data:", err);
+        setError("Error al cargar los datos del equipo");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEquipoData();
+  }, [initialEquipo, initialEquipo?.etiquetaEquipo]);
+
+  // Si tenemos datos iniciales, no mostramos loading
+  if (!loading && Object.keys(equipo).length === 0) {
+    return <div className="error">No se encontraron datos del equipo</div>;
+  }
 
   return (
     <div className="detalles-content">
-      {orderedKeys.map((key) => (
-        <div
-          key={key}
-          className={`detalle-item ${key === "etiquetaEquipo" || key === "usuario" ? "highlight" : ""}`}
-        >
-          <strong className="detalle-label">
-            {attributeNames[key] || key.replace(/([A-Z])/g, " $1")}:
-          </strong>
-          <span className="detalle-value">{getValue(key, equipo, usuario)}</span>
-        </div>
-      ))}
+      {loading ? (
+        <div className="loading">Cargando información del equipo...</div>
+      ) : error ? (
+        <div className="error">{error}</div>
+      ) : (
+        ORDERED_KEYS.map((key) => (
+          <div
+            key={key}
+            className={`detalle-item ${
+              key === "etiquetaEquipo" || key === "usuario" ? "highlight" : ""
+            }`}
+          >
+            <strong className="detalle-label">
+              {ATTRIBUTE_NAMES[key] || key.replace(/([A-Z])/g, " $1")}:
+            </strong>
+            <span className="detalle-value">
+              {formatValue(key, equipo[key], usuario)}
+            </span>
+          </div>
+        ))
+      )}
     </div>
   );
 };
 
-export default EquiposInfo;
+export default React.memo(EquiposInfo);

@@ -56,7 +56,11 @@ const EquiposButtons = ({ setIsModalOpen, equipo, onEquiposUpdated, reloadEquipo
     <div className="botones-container">
       <div className="botones-fila">
         <BotonSinpleRojo label="Imprimir" onClick={() => printEquipo(equipo)} className="fade-in" />
-        <BotonSinpleRojo label="Editar" onClick={() => setIsModalOpen(true)} className="fade-in" />
+        <BotonSinpleRojo
+          label="Editar"
+          onClick={() => setIsModalOpen(true)}
+          className="fade-in"
+        />
         <BotonSinpleRojo label="Asignar" onClick={() => setIsAssignPopupOpen(true)} className="fade-in" />
         <BotonSinpleRojo label="SAKA" onClick={() => handleDelete(equipo)} className="fade-in boton-saka" />
       </div>

@@ -27,7 +27,7 @@ const EquiposForm = ({ data, onChange }) => {
   const sistemasOperativosOpciones = ["Windows 10", "Windows 11", "Mac"];
 
   return (
-    <div className="equipos-form">
+    <div className="equipos-form-container">
       {Object.keys(labelNames).map((key) => {
         if (key === "usuario") {
           return null;

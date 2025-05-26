@@ -25,44 +25,43 @@ const EquiposStats = ({ fetchEquipos }) => {
 
   const [loading, setLoading] = useState(true);
 
-  // Función para actualizar las estadísticas de los equipos
-  const actualizarEstadisticas = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchEquipos();
-
-      // Filtrar y contar los equipos según las categorías
-      const total = data.length;
-      const backup = data.filter(e => e.tipo === 'BACKUP').length;
-      const sinAsignar = data.filter(e => e.usuario === 'Sin asignar').length;
-      const portatiles = data.filter(e => e.tipo === 'PORTATIL').length;
-      const workstations = data.filter(e => e.tipo === 'WORKSTATION').length;
-      const sobremesas = data.filter(e => e.tipo === 'SOBREMESA').length;
-      const win10 = data.filter(e => e.sistemaOperativo?.toLowerCase().includes('windows 10')).length;
-      const win11 = data.filter(e => e.sistemaOperativo?.toLowerCase().includes('windows 11')).length;
-
-      // Actualizar el estado con las estadísticas
-      setStats({ total, backup, sinAsignar, portatiles, workstations, sobremesas, win10, win11 });
-    } catch (error) {
-      console.error("Error actualizando estadísticas:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Llamada inicial para cargar las estadísticas
   useEffect(() => {
+    const actualizarEstadisticas = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchEquipos();
+
+        // Filtrar y contar los equipos según las categorías
+        const total = data.length;
+        const backup = data.filter(e => e.tipo === 'BACKUP').length;
+        const sinAsignar = data.filter(e => e.usuario === 'Sin asignar').length;
+        const portatiles = data.filter(e => e.tipo === 'PORTATIL').length;
+        const workstations = data.filter(e => e.tipo === 'WORKSTATION').length;
+        const sobremesas = data.filter(e => e.tipo === 'SOBREMESA').length;
+        const win10 = data.filter(e => e.sistemaOperativo?.toLowerCase().includes('windows 10')).length;
+        const win11 = data.filter(e => e.sistemaOperativo?.toLowerCase().includes('windows 11')).length;
+
+        // Actualizar el estado con las estadísticas
+        setStats({ total, backup, sinAsignar, portatiles, workstations, sobremesas, win10, win11 });
+      } catch (error) {
+        console.error("Error actualizando estadísticas:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     actualizarEstadisticas();
 
     // ESTA BUGEADO, MEJORAR EN EL FUTURO EL PARPADEO QUE GENERA LA ACTUALIZACION DE DATOS
     // Configurar un intervalo para actualizar las estadísticas cada 10 segundos
     const intervalo = setInterval(() => {
       actualizarEstadisticas();
-    }, 100000);
+    }, 10000); // 10000 ms = 10 segundos
 
     // Limpiar el intervalo al desmontar el componente
     return () => clearInterval(intervalo);
-  }, []);
+  }, [fetchEquipos]);
 
 
   return (

@@ -1,95 +1,141 @@
-/* Estilo minimalista del formulario de equipos */
-.equipos-form {
+/* Estilo moderno y accesible para el formulario de equipos */
+.equipos-form-container {
   max-width: 100%;
   margin: 0 auto;
-  padding: 10px;
-  background-color: #fef4f4;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px;
-  font-family: 'Roboto', sans-serif;
-  animation: smoothFadeIn 0.2s ease-out;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  animation: smoothFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-sizing: border-box;
+  border: 1px solid #f0f0f0;
 }
 
-.equipos-form .form-group {
+.equipos-form-container .form-group {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 6px;
+  position: relative;
 }
 
-.equipos-form label {
-  font-size: 0.8rem;
-  color: #5c0202;
-  font-weight: bolder;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.equipos-form-container label {
+  font-size: 0.85rem;
+  color: #333;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+  transition: all 0.2s ease;
 }
 
-/* Estilo de los inputs */
-.equipos-form input,
-.equipos-form select {
-  padding: 10px;
-  border: 1px solid #dcdcdc;
+/* Estilo mejorado para inputs */
+.equipos-form-container input,
+.equipos-form-container select {
+  padding: 12px 14px;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  background-color: #f9f9f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+  font-family: inherit;
+  color: #333;
+}
+
+/* Efectos de hover y focus mejorados */
+.equipos-form-container input:hover,
+.equipos-form-container select:hover {
+  border-color: #d0d0d0;
+  background-color: #f5f5f5;
+}
+
+.equipos-form-container input:focus,
+.equipos-form-container select:focus {
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
   background-color: #fff;
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1); 
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  font-family: inherit; /* Asegura consistencia en la fuente */
-}
-
-/* Efecto hover para inputs y selects */
-.equipos-form input:hover,
-.equipos-form select:hover {
-  border-color: #e74c3c;
-  box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
-}
-
-/* Select con estilo */
-.equipos-form select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-color: #fff;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"%3E%3Cpath fill="none" stroke="%23e74c3c" stroke-width="1" d="M0 0l5 5 5-5z"/%3E%3C/svg%3E');
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-  background-size: 15px;
-  padding-right: 20px; /* Espacio para el icono */
-}
-
-/* Inputs y selects en foco */
-.equipos-form input:focus,
-.equipos-form select:focus {
-  border-color: #c0392b; /* Rojo más intenso */
-  box-shadow: 0 0 5px rgb(255, 25, 0.3); /* Sombra más marcada */
   outline: none;
 }
 
-/* Diseño responsivo */
-@media (max-width: 768px) {
-  .equipos-form {
-    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
-    gap: 20px;
-  }
+/* Select personalizado con mejor estilo */
+.equipos-form-container select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 36px;
+  cursor: pointer;
+}
 
-  .equipos-form .form-buttons {
-    flex-direction: column;
-    gap: 15px;
+/* Estilo para el input de fecha */
+.equipos-form-container input[type="date"] {
+  position: relative;
+}
+
+.equipos-form-container input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 10px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+/* Efecto de placeholder mejorado */
+.equipos-form-container input::placeholder {
+  color: #aaa;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.equipos-form-container input:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* Diseño responsivo mejorado */
+@media (max-width: 768px) {
+  .equipos-form-container {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 14px;
+  }
+  
+  .equipos-form-container .form-group {
+    gap: 5px;
   }
 }
 
-/* Animación de entrada suave */
+/* Animación mejorada */
 @keyframes smoothFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
+}
+
+/* Estilo para los grupos de formulario con enfoque */
+.form-group:focus-within label {
+  color: #4285f4;
+}
+
+/* Estilo para inputs inválidos */
+.equipos-form-container input:invalid:not(:placeholder-shown) {
+  border-color: #ff6b6b;
+}
+
+.equipos-form-container input:invalid:not(:placeholder-shown) + .error-message {
+  display: block;
+}
+
+/* Transición suave para todos los elementos del formulario */
+.equipos-form-container * {
+  transition: all 0.2s ease;
 }

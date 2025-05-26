@@ -27,7 +27,11 @@ const BarraFilter = ({ searchTerm, setSearchTerm, selectedTipo, setSelectedTipo,
       <BotonAgregar label="Agregar Equipo" type="submit" onClick={() => setIsModalOpen(true)} />
 
       {isModalOpen && (
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          fullScreen={true} // Cambiar a false para versión normal
+        >
           <AgregarEquipoForm 
             onSubmit={handleCloseModal} 
             fetchEquipos={fetchEquipos}
