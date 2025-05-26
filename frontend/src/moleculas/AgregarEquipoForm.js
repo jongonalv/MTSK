@@ -37,7 +37,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                   name="etiquetaEquipo"
                   value={formData.etiquetaEquipo}
                   readOnly
-                  required
                 />
               </div>
               {errors.etiquetaEquipo && <span className="aeq-error">{errors.etiquetaEquipo}</span>}
@@ -63,7 +62,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 name="marca" 
                 value={formData.marca} 
                 onChange={handleChange} 
-                required 
               />
               {errors.marca && <span className="aeq-error">{errors.marca}</span>}
             </div>
@@ -75,7 +73,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 name="modelo" 
                 value={formData.modelo} 
                 onChange={handleChange} 
-                required 
               />
               {errors.modelo && <span className="aeq-error">{errors.modelo}</span>}
             </div>
@@ -111,7 +108,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 name="procesador" 
                 value={formData.procesador} 
                 onChange={handleChange} 
-                required 
               />
               {errors.procesador && <span className="aeq-error">{errors.procesador}</span>}
             </div>
@@ -137,7 +133,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 name="discoDuro" 
                 value={formData.discoDuro} 
                 onChange={handleChange} 
-                required 
               />
               {errors.discoDuro && <span className="aeq-error">{errors.discoDuro}</span>}
             </div>
@@ -172,7 +167,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 name="numeroSerie" 
                 value={formData.numeroSerie} 
                 onChange={handleChange} 
-                required 
               />
               {errors.numeroSerie && <span className="aeq-error">{errors.numeroSerie}</span>}
             </div>
@@ -184,7 +178,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 name="numeroPedido" 
                 value={formData.numeroPedido} 
                 onChange={handleChange} 
-                required 
               />
               {errors.numeroPedido && <span className="aeq-error">{errors.numeroPedido}</span>}
             </div>
@@ -208,7 +201,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                   name="fechaCompra" 
                   value={formData.fechaCompra} 
                   onChange={handleChange} 
-                  required 
                 />
               </div>
               {errors.fechaCompra && <span className="aeq-error">{errors.fechaCompra}</span>}
@@ -222,7 +214,6 @@ const AgregarEquipoForm = ({ onSubmit, fetchEquipos, reloadEquipos }) => {
                 value={formData.garantia} 
                 onChange={handleChange} 
                 min="1"
-                required 
               />
               {errors.garantia && <span className="aeq-error">{errors.garantia}</span>}
             </div>

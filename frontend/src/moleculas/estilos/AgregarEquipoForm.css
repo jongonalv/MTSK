@@ -20,30 +20,41 @@
   margin: auto;
   padding: 0 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .aeq-form-header {
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
-  color: var(--dark-color);
+  color: var(--primary-dark);
+  background: linear-gradient(90deg, #fff 20%, #fa66665b 100%);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(229, 57, 53, 0.07);
+  padding: 0.8rem 1.2rem;
 }
 
 .aeq-form-header h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-left: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-left: 0.7rem;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #ffeaea;
 }
 
 .aeq-header-icon {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   color: var(--primary-color);
+  filter: drop-shadow(0 2px 6px #ffbdbd);
 }
 
 .aeq-form {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .aeq-form-card {
@@ -55,24 +66,31 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .aeq-card-header {
   display: flex;
   align-items: center;
-  padding: 0.8rem 1.2rem;
+  padding: 1rem 1.2rem;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
+  box-shadow: 0 2px 8px rgba(229, 57, 53, 0.13);
 }
 
 .aeq-card-header h3 {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-left: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-left: 0.7rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px #b71c1c44;
 }
 
 .aeq-card-icon {
-  font-size: 1rem;
+  font-size: 1.3rem;
+  filter: drop-shadow(0 2px 6px #fff3);
 }
 
 .aeq-form-grid {
@@ -81,53 +99,79 @@
   gap: 1rem;
   padding: 1.2rem;
   flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .aeq-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .aeq-form-group label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--dark-color);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  letter-spacing: 0.2px;
+  margin-bottom: 0.1rem;
 }
 
 .aeq-form-group input,
 .aeq-form-group select {
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--light-gray);
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid var(--light-gray);
   border-radius: var(--border-radius);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 500;
   transition: var(--transition);
-  background-color: white;
+  background-color: #fff;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 100%;
+  color: var(--dark-color);
+  box-shadow: 0 1px 4px #f8f9fa;
 }
 
 .aeq-form-group input:focus,
 .aeq-form-group select:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.15);
+  box-shadow: 0 0 0 3px #ffbdbd44;
+  background: #fff6f6;
 }
 
 .aeq-input-with-icon {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .aeq-input-with-icon svg {
   position: absolute;
   left: 0.8rem;
-  color: var(--gray-color);
-  font-size: 0.9rem;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px #ffbdbd);
 }
 
 .aeq-input-with-icon input {
-  padding-left: 2.2rem !important;
+  padding-left: 2.4rem !important;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .aeq-checkbox-container {
@@ -140,7 +184,9 @@
   cursor: pointer;
   user-select: none;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primary-dark);
 }
 
 .aeq-checkbox {
@@ -153,18 +199,20 @@
 
 .aeq-checkmark {
   display: inline-block;
-  width: 1.1rem;
-  height: 1.1rem;
-  background-color: white;
-  border: 1px solid var(--light-gray);
-  border-radius: 3px;
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: #fff;
+  border: 2px solid var(--light-gray);
+  border-radius: 4px;
   transition: var(--transition);
   position: relative;
+  box-shadow: 0 1px 4px #f8f9fa;
 }
 
 .aeq-checkbox:checked ~ .aeq-checkmark {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+  box-shadow: 0 2px 8px #ffbdbd88;
 }
 
 .aeq-checkmark:after {
@@ -180,6 +228,10 @@
   transform: rotate(45deg);
 }
 
+.aeq-checkbox:checked ~ .aeq-checkmark:after {
+  display: block;
+}
+
 .aeq-form-footer {
   grid-column: 1 / -1;
   display: flex;
@@ -187,70 +239,87 @@
   align-items: center;
   gap: 1rem;
   margin-top: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .aeq-submit-button {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
   border: none;
-  padding: 0.7rem 1.5rem;
+  padding: 1.1rem 2.2rem;
+  margin-bottom: 2.5rem;
   border-radius: var(--border-radius);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.15rem;
+  font-weight: 700;
   cursor: pointer;
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 2px 6px rgba(229, 57, 53, 0.15);
+  gap: 0.7rem;
+  box-shadow: 0 2px 12px #ffbdbd55;
   width: auto;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px #b71c1c44;
 }
 
 .aeq-submit-button:hover {
   background: linear-gradient(135deg, var(--primary-dark), var(--secondary-color));
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(229, 57, 53, 0.25);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px #e5393555;
 }
 
 .aeq-message {
-  padding: 0.7rem 1.2rem;
+  padding: 0.9rem 1.5rem;
   border-radius: var(--border-radius);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   text-align: center;
   width: 100%;
   max-width: 100%;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: #fff6f6;
+  box-shadow: 0 2px 8px #ffbdbd22;
 }
 
 /* Optimización para pantallas más pequeñas */
 @media (max-width: 900px) {
   .aeq-form {
     grid-template-columns: 1fr;
+    width: 100%;
   }
-  
   .aeq-form-container {
     padding: 0 0.8rem;
+    width: 100%;
   }
-  
   .aeq-form-header h2 {
     font-size: 1.3rem;
+  }
+  .aeq-form-card {
+    width: 100%;
+    min-width: 0;
   }
 }
 
 @media (max-width: 480px) {
   .aeq-form-grid {
     padding: 1rem;
+    width: 100%;
   }
-  
   .aeq-form-group input,
   .aeq-form-group select {
     padding: 0.5rem 0.7rem;
     font-size: 0.85rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
-  
   .aeq-input-with-icon input {
     padding-left: 2rem !important;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
-  
   .aeq-input-with-icon svg {
     left: 0.7rem;
     font-size: 0.8rem;

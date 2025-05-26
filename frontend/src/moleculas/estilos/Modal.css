@@ -1,11 +1,16 @@
 /* Estilos base del modal */
 .modal-overlay {
+  /* Fondo increíble: gradiente animado con partículas */
+  background:
+    radial-gradient(circle at 20% 30%, #ffb6b9 0%, transparent 70%),
+    radial-gradient(circle at 80% 70%, #b5ead7 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, #c9c9ff 0%, transparent 80%),
+    linear-gradient(120deg, #f8ffae 0%, #43c6ac 100%);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,6 +18,18 @@
   padding: 8px;
   box-sizing: border-box;
   animation: fadeIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+.modal-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-radial-gradient(circle at 10% 10%, #fff8, #fff0 10px, transparent 40px),
+              repeating-radial-gradient(circle at 90% 90%, #fff5, #fff0 10px, transparent 40px);
+  animation: modalParticles 8s linear infinite alternate;
 }
 
 .modal-content {
@@ -26,25 +43,84 @@
   position: relative;
   animation: slideUp 0.25s ease-out;
   font-size: 0.97rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Scrollbar vertical personalizada */
+  scrollbar-width: thick;
+  scrollbar-color: #e57373 #ffeaea;
+}
+
+/* Scrollbar para navegadores Webkit */
+.modal-content::-webkit-scrollbar {
+  width: 18px;
+  background: #ffeaea;
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(120deg, #ffb6b9 40%, #e57373 100%);
+  border-radius: 10px;
+  min-height: 40px;
+  border: 4px solid #ffeaea;
+  box-shadow: 0 2px 8px #e5737355;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(120deg, #e57373 0%, #b71c1c 100%);
+}
+
+.modal-content::-webkit-scrollbar-corner {
+  background: #ffeaea;
 }
 
 .modal-close {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: none;
-  border: none;
-  font-size: 40px;
+  top: 16px;
+  right: 16px;
+  background: #fff;
+  border: 2px solid #e57373;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  color: #888;
-  transition: color 0.18s;
+  color: #e53935;
+  font-size: 2rem;
+  font-weight: bold;
   z-index: 10;
-  padding: 6px;
+  box-shadow: 0 2px 8px #ffb6b933;
+  transition: 
+    background 0.18s, 
+    color 0.18s, 
+    border 0.18s, 
+    transform 0.18s, 
+    box-shadow 0.18s;
+  outline: 3px solid #ffeaea;
+  outline-offset: 2px;
+  /* Centrado visual del icono */
   line-height: 1;
+  padding: 0;
 }
 
-.modal-close:hover {
+.modal-close span,
+.modal-close svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.modal-close:hover, .modal-close:focus {
+  background: #ffeaea;
   color: #b71c1c;
+  border-color: #b71c1c;
+  transform: scale(1.12) rotate(-8deg);
+  box-shadow: 0 4px 16px #e5737355;
+  outline: 3px solid #ffb6b9;
 }
 
 .modal-children-container {
@@ -84,6 +160,15 @@
   to { 
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes modalParticles {
+  0% {
+    background-position: 0 0, 100% 100%;
+  }
+  100% {
+    background-position: 100px 80px, 80% 60%;
   }
 }
 

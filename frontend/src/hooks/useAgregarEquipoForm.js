@@ -63,15 +63,15 @@ export function useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos }) 
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.etiquetaEquipo) newErrors.etiquetaEquipo = 'La etiqueta de equipo es requerida';
-    if (!formData.marca) newErrors.marca = 'La marca es requerida';
-    if (!formData.modelo) newErrors.modelo = 'El modelo es requerido';
-    if (!formData.procesador) newErrors.procesador = 'El procesador es requerido';
-    if (!formData.discoDuro) newErrors.discoDuro = 'El disco duro es requerido';
-    if (!formData.numeroSerie) newErrors.numeroSerie = 'El número de serie es requerido';
-    if (!formData.numeroPedido) newErrors.numeroPedido = 'El número de pedido es requerido';
-    if (!formData.fechaCompra) newErrors.fechaCompra = 'La fecha de compra es requerida';
-    if (!formData.garantia) newErrors.garantia = 'La garantía es requerida';
+    if (!formData.etiquetaEquipo) newErrors.etiquetaEquipo  = 'La etiqueta de equipo es requerida';
+    if (!formData.marca) newErrors.marca                    = 'La marca es requerida';
+    if (!formData.modelo) newErrors.modelo                  = 'El modelo es requerido';
+    if (!formData.procesador) newErrors.procesador          = 'El procesador es requerido';
+    if (!formData.discoDuro) newErrors.discoDuro            = 'El disco duro es requerido';
+    if (!formData.numeroSerie) newErrors.numeroSerie        = 'El número de serie es requerido';
+    if (!formData.numeroPedido) newErrors.numeroPedido      = 'El número de pedido es requerido';
+    if (!formData.fechaCompra) newErrors.fechaCompra        = 'La fecha de compra es requerida';
+    if (!formData.garantia) newErrors.garantia              = 'La garantía es requerida';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
