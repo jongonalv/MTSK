@@ -1,0 +1,160 @@
+/* Puedes poner esto en App.css o un archivo similar */
+.mtsk-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(30, 41, 59, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.mtsk-modal {
+  background: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  min-width: 320px;
+  max-width: 25vw;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(30,41,59,0.18);
+  animation: modalPop 0.3s;
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+@keyframes modalPop {
+  from { transform: translateY(40px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.mtsk-modal h4 {
+  margin-bottom: 1.2rem;
+  font-size: 1.55rem;
+  color: #1e293b;
+  text-align: center;
+}
+
+.mtsk-modal label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #475569;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  float: left;
+}
+
+.mtsk-modal input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  background: #f3ecec;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+
+.mtsk-modal input:focus {
+  border: 1.5px solid #2563eb;
+  outline: none;
+  background: #fff;
+}
+
+.mtsk-modal-actions {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mtsk-modal button {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #2563eb;
+  color: #fff;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  min-width: 100px;
+  margin-bottom: 0.25rem;
+}
+
+.mtsk-modal button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.mtsk-modal button:first-child {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.mtsk-modal button:first-child:hover {
+  background: #e2e8f0;
+}
+
+.mtsk-modal button:not(:first-child):hover {
+  background: #1d4ed8;
+}
+
+/* Mejoras para inputs y botones alineados */
+.mtsk-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Ajuste para evitar desbordes en pantallas pequeñas */
+@media (max-width: 600px) {
+  .mstk-modal {
+    min-width: unset;
+    width: 98vw;
+    padding: 1rem 0.5rem;
+  }
+}
+
+.mtsk-message-visual {
+  font-size: 0.42em;
+  padding: 8px 16px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: inline-block;
+  min-width: 220px;
+  max-width: 90%;
+  text-align: center;
+  transition: all 0.2s, opacity 0.5s;
+  opacity: 1;
+}
+.mtsk-error-message.mtsk-message-visual {
+  background: #ffeaea;
+  color: #b71c1c;
+  border: 1px solid #f44336;
+}
+.mtsk-success-message.mtsk-message-visual {
+  background: #e7fbe7;
+  color: #256029;
+  border: 1px solid #4caf50;
+}
+
+/* Clase para ocultar el mensaje con transición */
+.mtsk-message-hide {
+  opacity: 0 !important;
+  pointer-events: none;
+}

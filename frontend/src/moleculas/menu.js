@@ -7,7 +7,7 @@ import logo from '../resources/logolargo.png'; // Importar la imagen desde la ca
 const Menu = () => {
 
   // Estados
-  const [selectedComponent, setSelectedComponent] = useState('equipos');
+  const [selectedComponent, setSelectedComponent] = useState('inicio');
   const [equiposData, setEquiposData] = useState([]);
   const [recentEquipos, setRecentEquipos] = useState([]);
 

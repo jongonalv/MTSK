@@ -3,6 +3,7 @@ const cors = require("cors");
 const db = require("./db");
 const equiposRoutes = require("./routes/equipos");
 const usuariosRoutes = require("./routes/usuarios");
+const agregarUsuariosRoutes = require("./routes/agregarUsuario");
 const movimientosRoutes = require("./routes/movimientos");
 const asignarRoutes = require("./routes/asignar");
 const agregarEquipoRoutes = require("./routes/agregarEquipo");
@@ -24,6 +25,7 @@ app.use(updateEquipoRoutes);
 app.use(updateProductoRoutes);
 app.use(eliminarEquipoRoutes);
 app.use(siguienteEtiquetaRoutes);
+app.use(agregarUsuariosRoutes);
 
 app.listen(3001, () => {
     console.debug('Servidor corriendo en el puerto 3001');
