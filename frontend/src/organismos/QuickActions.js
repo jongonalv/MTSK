@@ -9,7 +9,7 @@ const QuickActions = () => {
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
-  const [hideMessage, setHideMessage] = useState(false); // Nuevo estado
+  const [hideMessage, setHideMessage] = useState(false);
 
   const handleSave = async () => {
     setMensaje('');
@@ -41,11 +41,11 @@ const QuickActions = () => {
         setShowModal(false);
         setUsuario('');
         setNombre('');
-        setTimeout(() => setHideMessage(true), 2100); // espera 2.1s antes de iniciar el fadeout
+        setTimeout(() => setHideMessage(true), 2100);
         setTimeout(() => {
           setMensaje('');
           setHideMessage(false);
-        }, 4200); // espera 2s más (total ~4.2s) antes de quitar el mensaje
+        }, 4200);
       } else {
         setError('Error al agregar usuario');
       }
@@ -66,7 +66,8 @@ const QuickActions = () => {
           {mensaje}
         </div>
       )}
-      {error && (
+      {/* Solo mostrar el error superior si el modal NO está abierto */}
+      {!showModal && error && (
         <div className="mtsk-error-message mtsk-message-visual">{error}</div>
       )}
       <div className="mtsk-widget-card__header">
@@ -90,7 +91,6 @@ const QuickActions = () => {
             color="success"
             onClick={() => {
               setShowModal(true);
-              setError('');
             }}
           />
           <QuickAction 

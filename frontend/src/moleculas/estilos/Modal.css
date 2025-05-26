@@ -2,10 +2,10 @@
 .modal-overlay {
   /* Fondo increíble: gradiente animado con partículas */
   background:
-    radial-gradient(circle at 20% 30%, #ffb6b9 0%, transparent 70%),
-    radial-gradient(circle at 80% 70%, #b5ead7 0%, transparent 70%),
-    radial-gradient(circle at 50% 50%, #c9c9ff 0%, transparent 80%),
-    linear-gradient(120deg, #f8ffae 0%, #43c6ac 100%);
+    radial-gradient(circle at 20% 30%, #ff006a93 0%, transparent 60%),
+    radial-gradient(circle at 80% 70%, #c4111146 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, #f74949 0%, transparent 80%),
+    linear-gradient(120deg, #f8ffae 0%, #c67743 100%);
   position: fixed;
   top: 0;
   left: 0;
@@ -27,13 +27,26 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: repeating-radial-gradient(circle at 10% 10%, #fff8, #fff0 10px, transparent 40px),
-              repeating-radial-gradient(circle at 90% 90%, #fff5, #fff0 10px, transparent 40px);
-  animation: modalParticles 8s linear infinite alternate;
+  background: repeating-radial-gradient(circle at 10% 10%, #fff8, #fff0 10px, transparent 100px),
+              repeating-radial-gradient(circle at 90% 90%, #fff5, #fff0 10px, transparent 100px),
+              repeating-linear-gradient(45deg, #fff0, #fff5 20px, #fff0 40px, transparent 60px);
+  /* Animación de partículas */
+  animation: modalParticles 8s linear infinite alternate-reverse;
+  opacity: 0.6;
+  background-size: 200px 200px, 150px 150px;
+  background-position: 0 0, 100% 100%;
+  background-blend-mode: overlay;
+  background-attachment: fixed;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease-in-out;
+  filter: blur(8px);
+  transform: scale(1.05);
+  will-change: background-position, transform;
+  /* Añadido para mejorar la experiencia en dispositivos móviles */
 }
 
 .modal-content {
-  background: rgb(255, 236, 236);
+  background: rgb(255, 229, 229);
   border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
   max-width: 480px;
@@ -47,7 +60,7 @@
   overflow-x: hidden;
   /* Scrollbar vertical personalizada */
   scrollbar-width: thin;
-  scrollbar-color: #ff9595 #ffeaea;
+  scrollbar-color: #ff7676 #ffeaea;
 }
 
 /* Scrollbar para navegadores Webkit */
