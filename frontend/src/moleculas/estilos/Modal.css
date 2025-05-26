@@ -46,8 +46,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   /* Scrollbar vertical personalizada */
-  scrollbar-width: thick;
-  scrollbar-color: #e57373 #ffeaea;
+  scrollbar-width: thin;
+  scrollbar-color: #ff9595 #ffeaea;
 }
 
 /* Scrollbar para navegadores Webkit */

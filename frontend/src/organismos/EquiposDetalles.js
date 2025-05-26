@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import EquiposInfo from "../moleculas/EquiposDetallesInfo";
 import EquiposModal from "../moleculas/EquiposModal";
 import EquiposButtons from "../moleculas/EquiposButtons";
-import "./estilos/equipos.css";
 import "../moleculas/estilos/Modal.css";
 import "./estilos/equiposDetalles.css"; 
 

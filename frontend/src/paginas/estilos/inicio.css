@@ -346,6 +346,7 @@
 .mtsk-activity-header strong {
   font-size: 1.1rem;
   color: var(--dark-color);
+  text-transform: uppercase;
 }
 
 .mtsk-activity-header time {

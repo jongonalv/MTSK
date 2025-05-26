@@ -7,7 +7,8 @@ const FILTROS = [
   "Editar equipo",
   "Asignar usuario",
   "Alta equipo",
-  "Eliminar equipo"
+  "Eliminar equipo",
+  "Alta usuario",
 ];
 
 const ActividadRecienteWidget = ({ loadingMov, movimientos }) => {

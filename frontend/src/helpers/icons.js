@@ -1,4 +1,3 @@
-// src/helpers/icons.js
 import { 
   FaClipboardList, 
   FaPlusCircle, 
@@ -14,12 +13,14 @@ import {
 export const getActivityIcon = (tipo) => {
   if (!tipo) return <FaClipboardList />;
   const t = tipo.trim().toLowerCase();
+
+  if (['alta equipo', 'alta de equipo', 'alta usuario', 'alta de usuario'].includes(t)) {
+    return <FaPlusCircle />;
+  }
+
   switch(t) {
     case 'editar equipo':
       return <FaClipboardList />;
-    case 'alta equipo':
-    case 'alta de equipo':
-      return <FaPlusCircle />;
     case 'asignar usuario':
       return <FaUsers />;
     case 'eliminar equipo':

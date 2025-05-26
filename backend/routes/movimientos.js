@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
+// Ruta para obtener los últimos 1000 movimientos
 router.get('/movimientos', (req, res) => {
     const sqlQuery = `
         SELECT ID_Movimiento, etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario

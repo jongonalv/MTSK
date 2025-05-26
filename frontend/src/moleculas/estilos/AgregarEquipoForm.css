@@ -137,7 +137,7 @@
   box-sizing: border-box;
   max-width: 100%;
   color: var(--dark-color);
-  box-shadow: 0 1px 4px #f8f9fa;
+  box-shadow: 0 1px 4px #f8d6d6;
 }
 
 .aeq-form-group input:focus,

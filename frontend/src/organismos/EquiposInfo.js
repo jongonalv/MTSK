@@ -5,7 +5,6 @@ import EquiposTable from '../moleculas/EquiposTable';
 import EquiposDetail from './EquiposDetalles';
 import RecentEquipos from './RecentEquipos';
 import EquiposStats from './EquiposStats';
-import './estilos/equipos.css';
 
 // Organismo que contiene la información de los equipos
 const EquiposInfo = ({
