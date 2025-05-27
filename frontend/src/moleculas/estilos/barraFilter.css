@@ -1,133 +1,150 @@
 /* Contenedor principal de la barra de filtros */
 .barra-filter-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   align-items: center;
-  background: linear-gradient(135deg, #f0f0f0, #f8f8f8); /* Gradiente claro y suave */
-  padding: 12px 16px;
-  border-radius: 10px;
+  background: linear-gradient(120deg, #f8fafc 60%, #fbeee6 100%);
+  padding: 18px 28px;
+  border-radius: 14px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.09);
   box-sizing: border-box;
-  gap: 10px;
-  border: 2px solid #e0e0e0; /* Borde más suave */
+  gap: 18px 24px;
+  border: 2px solid #e0e0e0;
+  margin-bottom: 18px;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.barra-filter-container:hover {
+  box-shadow: 0 10px 32px rgba(229, 115, 115, 0.1);
+  background: linear-gradient(120deg, #f6f6f6 60%, #fbeee6 100%);
 }
 
 /* Elementos individuales de la barra de filtros */
 .barra-filter-item {
-  flex: 1;
   display: flex;
   align-items: center;
-  min-width: 150px;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
 }
 
-/* Estilos para los inputs y selects */
+/* Inputs y selects ocupan el máximo espacio posible */
 .barra-filter-item input,
 .barra-filter-item select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #ffffff;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1.5px solid #ccc;
+  border-radius: 7px;
+  background-color: #fff;
   box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
 }
 
 .barra-filter-item input:focus,
 .barra-filter-item select:focus {
-  border-color: #b04a4a; /* Color de borde al enfocar, rojo suave */
-  box-shadow: 0 0 8px rgba(176, 74, 74, 0.5); /* Sombra al enfocar */
+  border-color: #e57373;
+  box-shadow: 0 0 8px rgba(229, 115, 115, 0.18);
 }
 
-/* Estilos para el botón */
+/* Botón alineado a la derecha de su celda */
 .barra-filter-item button {
-  padding: 10px 20px;
-  background-color: #c44b4b;
-  color: #ffffff;
+  flex: 0 0 auto;
+  padding: 11px 26px;
+  background: linear-gradient(90deg, #e57373 60%, #fbeee6 100%);
+  color: #fff;
   border: none;
-  border-radius: 8px; /* Bordes redondeados */
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-left: auto;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.22s, transform 0.18s, box-shadow 0.18s;
+  margin-left: 0;
+  box-shadow: 0 2px 8px rgba(229, 115, 115, 0.1);
+  align-self: stretch;
 }
 
-.barra-filter-item button:hover {
-  background-color: #a04040; /* Fondo rojizo más oscuro al hacer hover */
-  transform: translateY(-1px); /* Efecto de elevación sutil */
+.barra-filter-item button:hover,
+.barra-filter-item button:focus {
+  background: linear-gradient(90deg, #c0392b 80%, #e57373 100%);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(192, 57, 43, 0.14);
 }
 
 .barra-filter-item button:active {
-  transform: translateY(0); /* Restablece la posición al hacer clic */
+  transform: translateY(0) scale(0.98);
 }
 
-/* Estilos responsivos */
+/* Responsive: tablet */
 @media (max-width: 1024px) {
   .barra-filter-container {
-    flex-direction: column;
-    gap: 10px;
-    padding: 16px;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 18px 12px;
   }
 
   .barra-filter-item {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .barra-filter-item:last-child {
-    margin-bottom: 0;
+    gap: 8px;
   }
 
   .barra-filter-item button {
     width: 100%;
     margin-left: 0;
+    margin-top: 0;
   }
 }
 
+/* Responsive: móvil grande */
 @media (max-width: 768px) {
   .barra-filter-container {
-    flex-direction: column;
-    gap: 10px;
-    padding: 16px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px 6px;
   }
 
   .barra-filter-item {
-    width: 100%;
-    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
   }
 
-  .barra-filter-item:last-child {
-    margin-bottom: 0;
+  .barra-filter-item input,
+  .barra-filter-item select {
+    font-size: 0.97rem;
+    padding: 9px 10px;
   }
 
   .barra-filter-item button {
     width: 100%;
-    margin-left: 0;
+    font-size: 0.98rem;
+    padding: 10px 0;
   }
 }
 
+/* Responsive: móvil pequeño */
 @media (max-width: 480px) {
   .barra-filter-container {
-    padding: 12px;
+    padding: 8px 2px;
+    gap: 8px;
+    border-radius: 8px;
   }
 
   .barra-filter-item {
-    width: 100%;
-    margin-bottom: 8px;
-  }
-
-  .barra-filter-item:last-child {
-    margin-bottom: 0;
+    gap: 4px;
   }
 
   .barra-filter-item input,
   .barra-filter-item select,
   .barra-filter-item button {
-    padding: 8px;
-    font-size: 14px;
+    font-size: 0.95rem;
+    padding: 8px 8px;
   }
 
   .barra-filter-item button {
-    padding: 10px;
+    padding: 9px 0;
   }
 }

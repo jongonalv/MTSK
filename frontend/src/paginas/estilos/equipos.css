@@ -1,72 +1,110 @@
-/* Contenedor principal de equipos */
+/* Contenedor principal de equipos - Mejorado con variables CSS */
 .equipos-main-container {
+  --primary-accent: #da321cf8;
+  --card-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  flex-direction: column;
   width: 100%;
-  height: 800px;
-  padding:35px;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
   box-sizing: border-box;
-  gap: 20px; /* Espacio entre los contenedores */
+  gap: 1.5rem;
 }
 
-/* Contenedor de contenido de equipos */
+/* Contenedor de contenido de equipos - Mejor estructura responsive */
 .equipos-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: stretch;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
   width: 100%;
-
+  align-items: stretch;
 }
 
-/* Contenedor individual de equipo */
+/* Contenedor individual de equipo - Efectos mejorados */
 .equipos-container {
-  flex: 1;
-  padding: 30px 40px;
+  position: relative;
+  padding: 2rem;
   background-color: hsl(0, 0%, 100%);
   border-radius: 12px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+  box-shadow: var(--card-shadow);
   display: flex;
-  border-left: 5px solid #da321cf8;
   flex-direction: column;
-  gap: 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
-  transform: scale(1);
+  gap: 1rem;
+  transition: var(--transition-smooth);
+  overflow: hidden;
+  border-left: 5px solid var(--primary-accent);
+  /* z-index: 0;  <-- Asegúrate de que no haya z-index bajo aquí */
 }
 
-/* Ajuste para pantallas pequeñas */
+/* Efecto hover mejorado */
+.equipos-container:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* Pseudo-elemento para efecto de acento */
+.equipos-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(218, 50, 28, 0.05) 0%, rgba(218, 50, 28, 0.01) 100%);
+  opacity: 0;
+  transition: var(--transition-smooth);
+  /* SOLUCIÓN: */
+  pointer-events: none; /* <-- Esto permite hacer clic en los elementos hijos */
+  z-index: 1;
+}
+
+.equipos-container:hover::before {
+  opacity: 1;
+}
+
+/* Media Queries optimizadas */
+@media (max-width: 1024px) {
+  .equipos-main-container {
+    padding: 1.5rem;
+  }
+  
+  .equipos-content {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .equipos-main-container {
-    flex-direction: column;
-    padding: 15px;
-    gap: 20px;
+    padding: 1.25rem;
+    gap: 1.25rem;
   }
-
+  
   .equipos-content {
-    flex-direction: column; /* Cambia la dirección a columna */
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
-
+  
   .equipos-container {
-    width: 100%;
-    padding: 20px;
+    padding: 1.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .equipos-main-container {
-    padding: 10px;
-    gap: 15px; /* Ajusta el espacio entre contenedores */
+    padding: 1rem;
+    gap: 1rem;
   }
-
-  .equipos-content {
-    gap: 15px; /* Ajusta el espacio entre contenedores */
-  }
-
+  
   .equipos-container {
-    width: 100%; /* Contenedores ocupan todo el ancho */
-    padding: 15px;
+    padding: 1.5rem;
+    border-left-width: 4px;
+  }
+}
+
+/* Efecto para cuando hay muchos equipos */
+@media (min-width: 1600px) {
+  .equipos-content {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
 }

@@ -9,7 +9,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   border-left: 5px solid #da321cf8;
-  width: 30%;
+  width: 93%;
   margin: 0 auto;
   transition: box-shadow 0.3s ease;
 }
@@ -45,7 +45,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   margin-bottom: 20px;
   width: 100%;
-  max-width: 600px; /* Ancho máximo para el contenedor */
+  max-width: 800px; /* Ancho máximo para el contenedor */
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -97,36 +97,49 @@
 
 /* Contenedor de botones */
 .botones-container {
-  display: flex;
-  flex-wrap: wrap; /* Permite que los botones se envuelvan en múltiples filas */
-  justify-content: center; /* Centra los botones horizontalmente */
-  gap: 10px; /* Espacio entre botones */
-  margin-top: 20px; /* Espacio superior */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  justify-items: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
 }
 
 /* Contenedor de los botones en fila */
 .botones-fila {
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  width: 100%;
+  display: contents;
 }
 
 .botones-container button,
 .botones-fila button {
-  flex: 1 1 calc(25% - 20px); /* Ajusta el tamaño de los botones para que ocupen el 25% del contenedor menos el espacio del gap */
-  max-width: calc(25% - 20px); /* Asegura que los botones no excedan el 25% del contenedor */
+  width: 85%;
+  max-width: none;
+  min-width: 0;
+  padding: 0.7em 1.2em;
+  border-radius: 8px;
+  background-color: #e57373;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 8px rgba(229, 115, 115, 0.13);
+  transition: background-color 0.2s, color 0.2s, transform 0.13s, box-shadow 0.2s;
+  cursor: pointer;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
 }
 
 .botones-container button:hover,
 .botones-fila button:hover {
   background-color: #c0392b;
-  transform: translateY(-2px);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(192, 57, 43, 0.18);
 }
 
 .botones-container button:active,
 .botones-fila button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
 /* Ajuste para pantallas pequeñas */
@@ -186,5 +199,17 @@
 
   .botones-container button {
     width: 100%;
+  }
+}
+
+/* Responsive: 1 columna en móvil */
+@media (max-width: 600px) {
+  .botones-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .botones-container button {
+    font-size: 0.95rem;
+    padding: 0.6em 1em;
   }
 }

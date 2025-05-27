@@ -10,10 +10,12 @@ const Menu = () => {
   const [selectedComponent, setSelectedComponent] = useState('inicio');
   const [equiposData, setEquiposData] = useState([]);
   const [recentEquipos, setRecentEquipos] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false); // Nuevo estado para el menú responsive
 
   // Función para cambiar el componente seleccionado
   const handleMenuClick = (component) => {
     setSelectedComponent(component);
+    setMenuOpen(false); // Oculta el menú después de seleccionar
   };
 
   // Función para obtener los equipos
@@ -40,8 +42,20 @@ const Menu = () => {
 
   return (
     <div>
+      {/* Botón hamburguesa para responsive */}
+      <button
+        className="menu-toggle"
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-label="Abrir/cerrar menú"
+      >
+        {/* Icono hamburguesa simple */}
+        <span className="menu-toggle-bar"></span>
+        <span className="menu-toggle-bar"></span>
+        <span className="menu-toggle-bar"></span>
+      </button>
+
       {/* Menú de navegación */}
-      <nav className="menu-container">
+      <nav className={`menu-container${menuOpen ? ' open' : ''}`}>
         {/* Logo arriba a la izquierda */}
         <img src={logo} alt="Logo" className="menu-logo" />
 

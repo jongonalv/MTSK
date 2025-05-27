@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaPlusCircle, FaLaptop, FaUsers, FaClipboardList, FaBoxOpen } from 'react-icons/fa';
 import QuickAction from '../moleculas/componentes_inicio/QuickAction';
-import './estilos/QuickActions.css'; // Asegúrate de tener este archivo CSS para estilos
+import './estilos/QuickActions.css';  // Asegúrate de tener este archivo CSS para estilos
 
 const QuickActions = () => {
   const [showModal, setShowModal] = useState(false);
@@ -11,6 +11,8 @@ const QuickActions = () => {
   const [error, setError] = useState('');
   const [hideMessage, setHideMessage] = useState(false);
 
+  // Maneja el guardado del nuevo usuario
+  // y valida que no exista un usuario con el mismo nombre (case-insensitive)
   const handleSave = async () => {
     setMensaje('');
     setError('');

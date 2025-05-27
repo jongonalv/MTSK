@@ -4,8 +4,9 @@
   text-align: center;
   min-height: 100vh;
   background: radial-gradient(circle, #ffffff, #dfe6e9);
-  background-image: url('https://www.transparenttextures.com/patterns/hexellence.png'); /* Fondo más visible */
-  background-size: 300px;
+  background-image: url('https://www.transparenttextures.com/patterns/hexellence.png');
+  background-size: 300px 300px;
+  background-repeat: repeat;
   background-blend-mode: multiply;
   opacity: 0.9;
 }
@@ -20,7 +21,6 @@
   color: transparent;
   display: inline;
   margin-top: auto;
-  padding: 10px 0;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
