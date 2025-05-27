@@ -26,8 +26,8 @@
   box-shadow: var(--box-shadow);
   transition: box-shadow 0.3s, background 0.3s;
   width: 100%;
-  max-width: 100%;
-  margin: 8px 0 24px 0;
+  max-width: 520px;
+  margin: 8px 2vw 24px auto;
   min-width: 0;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -170,6 +170,8 @@
 @media (max-width: 1024px) {
   .equipos-stats-container {
     padding: 7px 2px 7px 2px;
+    width: 100%;
+    max-width: 100vw;
     margin: 7px 0 18px 0;
   }
   .stats-grid {
@@ -190,6 +192,8 @@
 @media (max-width: 600px) {
   .equipos-stats-container {
     padding: 4px 0 4px 0;
+    width: 100%;
+    max-width: 100vw;
     margin: 4px 0 14px 0;
     border-radius: 8px;
   }

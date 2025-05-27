@@ -29,6 +29,8 @@ export function useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos }) 
     return prefix;
   };
 
+  // Generar etiqueta automáticamente al cambiar tipo, empresa o esBackup
+  // Se usa un useEffect para evitar múltiples llamadas al servidor
   useEffect(() => {
     const timer = setTimeout(() => {
       const generarEtiqueta = async () => {
@@ -61,6 +63,7 @@ export function useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos }) 
     }
   };
 
+  // Validación del formulario
   const validateForm = () => {
     const newErrors = {};
     if (!formData.etiquetaEquipo) newErrors.etiquetaEquipo  = 'La etiqueta de equipo es requerida';

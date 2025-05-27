@@ -34,4 +34,4 @@ const EquiposTable = ({ filteredEquipos, handleRowClick }) => {
   );
 };
 
-export default EquiposTable;
+export default EquiposTable;  

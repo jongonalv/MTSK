@@ -9,7 +9,7 @@ const BarraBusqueda = ({ searchTerm, handleSearchChange }) => {
   return (
     <input
       type="text"
-      placeholder="Buscar por etiqueta, marca o usuario..."
+      placeholder="Buscar..."
       value={searchTerm}
       onChange={handleChange}
       className="search-input"

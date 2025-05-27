@@ -1,8 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import './estilos/menu.css';
 import Equipos from '../paginas/Equipos';
-import Inicio from '../paginas/Inicio'; // Importando Equipos desde ../organismos/equipos
-import logo from '../resources/logolargo.png'; // Importar la imagen desde la carpeta src
+import Inicio from '../paginas/Inicio';
+import Accesorios from '../paginas/Accesorios';
+import logo from '../resources/logolargo.png';
 
 const Menu = () => {
 
@@ -75,7 +76,7 @@ const Menu = () => {
       {selectedComponent === 'inicio' && <h1><Inicio/></h1>}
       {selectedComponent === 'nuevo-movimiento' && <h1>Nuevo Movimiento</h1>}
       {selectedComponent === 'impresoras' && <h1>Impresoras</h1>}
-      {selectedComponent === 'accesorios' && <h1>Accesorios</h1>}
+      {selectedComponent === 'accesorios' && <h1><Accesorios/></h1>}
       {selectedComponent === 'monitores' && <h1>Monitores</h1>}
       {selectedComponent === 'proyectores' && <h1>Proyectores</h1>}
       {selectedComponent === 'licencias' && <h1>Licencias</h1>}
