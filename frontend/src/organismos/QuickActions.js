@@ -1,15 +1,31 @@
 import React, { useState } from 'react';
-import { FaPlusCircle, FaLaptop, FaUsers, FaClipboardList, FaBoxOpen } from 'react-icons/fa';
+import { FaPlusCircle, FaLaptop, FaUsers, FaClipboardList, FaBoxOpen, FaCheckCircle } from 'react-icons/fa';
 import QuickAction from '../moleculas/componentes_inicio/QuickAction';
+import AgregarEquipoForm from '../moleculas/AgregarEquipoForm';
+import EquiposSinAsignar from '../moleculas/EquiposSinAsignar';
+import Modal from '../moleculas/Modal';
 import './estilos/QuickActions.css';  // Asegúrate de tener este archivo CSS para estilos
 
 const QuickActions = () => {
   const [showModal, setShowModal] = useState(false);
   const [usuario, setUsuario] = useState('');
+  const [showEquipoModal, setShowEquipoModal] = useState(false);
+  const [showEquiposDisponibles, setShowEquiposDisponibles] = useState(false);
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
   const [hideMessage, setHideMessage] = useState(false);
+
+  const handleGenerarReporte = async () => {
+    const res = await fetch('/reporte-equipos', { method: 'GET' });
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'reporte_equipos.xlsx';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   // Maneja el guardado del nuevo usuario
   // y valida que no exista un usuario con el mismo nombre (case-insensitive)
@@ -56,8 +72,7 @@ const QuickActions = () => {
       console.error('Error al agregar usuario:', error);
     }
   };
-
-  return (
+ return (
     <div className="mtsk-widget-card mtsk-quick-actions">
       {mensaje && (
         <div
@@ -68,7 +83,6 @@ const QuickActions = () => {
           {mensaje}
         </div>
       )}
-      {/* Solo mostrar el error superior si el modal NO está abierto */}
       {!showModal && error && (
         <div className="mtsk-error-message mtsk-message-visual">{error}</div>
       )}
@@ -81,31 +95,32 @@ const QuickActions = () => {
       <div className="mtsk-widget-card__body">
         <div className="mtsk-actions-grid">
           <QuickAction 
-            link="#/agregar-equipo" 
+            link="#"
             icon={<FaLaptop />} 
             text="Agregar equipo" 
             color="primary"
+            onClick={() => setShowEquipoModal(true)}
           />
           <QuickAction 
             link="#"
             icon={<FaUsers />} 
             text="Registrar usuario" 
             color="success"
-            onClick={() => {
-              setShowModal(true);
-            }}
+            onClick={() => setShowModal(true)}
           />
           <QuickAction 
-            link="#/asignar-equipo" 
-            icon={<FaClipboardList />} 
-            text="Asignar equipo" 
+            link="#"
+            icon={<FaCheckCircle />}
+            text="Equipos disponibles"
             color="warning"
+            onClick={() => setShowEquiposDisponibles(true)}
           />
           <QuickAction 
-            link="#/reportes" 
+            link="#"
             icon={<FaBoxOpen />} 
             text="Generar reporte" 
             color="info"
+            onClick={handleGenerarReporte}
           />
         </div>
       </div>
@@ -137,6 +152,20 @@ const QuickActions = () => {
             </form>
           </div>
         </div>
+      )}
+      {showEquipoModal && (
+        <Modal 
+          isOpen={showEquipoModal}
+          onClose={() => setShowEquipoModal(false)}
+          fullScreen={true}
+        >
+          <AgregarEquipoForm 
+            onSubmit={() => setShowEquipoModal(false)}
+          />
+        </Modal>
+      )}
+      {showEquiposDisponibles && (
+        <EquiposSinAsignar onClose={() => setShowEquiposDisponibles(false)} />
       )}
     </div>
   );

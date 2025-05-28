@@ -3,9 +3,9 @@
   /* Fondo increíble: gradiente animado con partículas */
   background:
     radial-gradient(circle at 20% 30%, #ff006a93 0%, transparent 60%),
-    radial-gradient(circle at 80% 70%, #c4111146 0%, transparent 70%),
-    radial-gradient(circle at 50% 50%, #f74949 0%, transparent 80%),
-    linear-gradient(120deg, #f8ffae 0%, #c67743 100%);
+    radial-gradient(circle at 80% 70%, #55f15546 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, #ffbe92 0%, transparent 80%),
+    linear-gradient(120deg, #20201f 0%, #4b0404 100%);
   position: fixed;
   top: 0;
   left: 0;

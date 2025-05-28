@@ -13,6 +13,8 @@ const eliminarEquipoRoutes = require("./routes/eliminarEquipo");
 const siguienteEtiquetaRoutes = require("./routes/siguienteEtiqueta");
 const accesoriosRoutes = require("./routes/accesorios");
 const alertasRoutes = require("./routes/alertas")
+const equiposSinAsignarRoutes = require("./routes/equiposSinAsignar");
+const reporteEquiposRouter = require("./routes/reporte-equipos");
 
 const app = express();
 app.use(cors());
@@ -30,6 +32,8 @@ app.use(siguienteEtiquetaRoutes);
 app.use(agregarUsuariosRoutes);
 app.use(accesoriosRoutes);
 app.use(alertasRoutes);
+app.use(equiposSinAsignarRoutes);
+app.use(reporteEquiposRouter);
 
 app.listen(3001, () => {
     console.debug('Servidor corriendo en el puerto 3001');
