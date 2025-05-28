@@ -66,6 +66,13 @@
   text-shadow: none;
 }
 
+.accesorios-header .accesorios-stock-amarillo {
+  color: #ff8b07;
+}
+.accesorios-header .accesorios-stock-rojo {
+  color: #e53935;
+}
+
 .accesorios-header .accesorios-desc {
   font-size: 1rem;
   color: #6c757d;

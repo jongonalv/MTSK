@@ -6,6 +6,7 @@ import DashboardHeader from '../atomos/DashboardHeader';
 import UltimosEquiposWidget from '../organismos/UltimosEquiposWidget';
 import DistribucionPorTipoWidget from '../organismos/DistribucionPorTipo';
 import ActividadRecienteWidget from '../organismos/ActividadRecienteWidget';
+import AlertasWidget from '../organismos/AlertasWidget';
 import './estilos/inicio.css';
 
 const Inicio = () => {
@@ -25,10 +26,11 @@ const Inicio = () => {
       <DashboardHeader />
       <MetricasDashboard stats={stats} loading={loading} />
       <section className="mtsk-content-grid">
-        <UltimosEquiposWidget loading={loading} ultimosEquipos={ultimosEquipos} />
         <DistribucionPorTipoWidget loading={loading} stats={stats} />
+        <UltimosEquiposWidget loading={loading} ultimosEquipos={ultimosEquipos} />
         <ActividadRecienteWidget loadingMov={loadingMov} movimientos={movimientos} />
         <QuickActions />
+        <AlertasWidget/>
       </section>
     </div>
   );

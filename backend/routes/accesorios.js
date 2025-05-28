@@ -25,4 +25,26 @@ router.get('/accesorios', (req, res) => {
     });
 });
 
+router.post('/accesorios/stock', (req, res) => {
+  const { etiquetaAccesorio, accion } = req.body;
+  if (!etiquetaAccesorio || !['mete', 'saka'].includes(accion)) {
+    return res.status(400).json({ error: 'Datos inválidos' });
+  }
+
+  const operacion = accion === 'mete' ? '+' : '-';
+  const sql = `
+    UPDATE accesorio
+    SET stock = GREATEST(stock ${operacion} 1, 0)
+    WHERE etiquetaAccesorio = ?
+  `;
+
+  db.query(sql, [etiquetaAccesorio], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar stock:', err);
+      return res.status(500).json({ error: 'Error al actualizar stock' });
+    }
+    res.json({ success: true });
+  });
+});
+
 module.exports = router;

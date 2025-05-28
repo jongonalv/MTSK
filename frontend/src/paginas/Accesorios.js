@@ -20,6 +20,18 @@ const Accesorios = () => {
 
   const accesorio = accesorios.find(a => a.etiquetaAccesorio === selected);
 
+    const enviarAlerta = async (etiquetaProducto, mensaje) => {
+    try {
+      await fetch('/alertas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ etiquetaProducto, mensaje })
+      });
+    } catch (e) {
+      alert('Error consiguiendo las alertas')
+    }
+  };
+
   const handleStock = async (accion) => {
     try {
       const res = await fetch('/accesorios/stock', {
@@ -28,9 +40,29 @@ const Accesorios = () => {
         body: JSON.stringify({ etiquetaAccesorio: selected, accion })
       });
       if (res.ok) {
-        // Opcional: recargar accesorios para actualizar el stock
         const updated = await fetch('/accesorios').then(r => r.json());
         setAccesorios(updated);
+
+        // Buscar el accesorio actualizado
+        const actualizado = updated.find(a => a.etiquetaAccesorio === selected);
+       if (actualizado) {
+          if (actualizado.Stock < 3) {
+            await enviarAlerta(
+              actualizado.etiquetaAccesorio,
+              `¡Stock crítico! Quedan solo ${actualizado.Stock} unidades de ${actualizado.nombreProducto}.`
+            );
+          } else if (actualizado.Stock < 5) {
+            await enviarAlerta(
+              actualizado.etiquetaAccesorio,
+              `Atención: Quedan menos de 5 unidades de ${actualizado.nombreProducto} (stock: ${actualizado.Stock}).`
+            );
+          } else if (actualizado.Stock >= 5) {
+            // Borra la alerta si el stock se recupera
+            await fetch(`/alertas/${actualizado.etiquetaAccesorio}`, {
+              method: 'DELETE'
+            });
+          }
+        }
       } else {
         alert('Error al modificar el stock');
       }
@@ -39,7 +71,7 @@ const Accesorios = () => {
     }
   };
 
-  return (
+   return (
     <div className={`accesorios-outer-center${metesakaMode ? ' metesaka-mode' : ''}`}>
       <div className="accesorios-bg-wrapper" />
       <div className={`accesorios-container${metesakaMode ? ' metesaka-crazy' : ''}`}>
@@ -66,9 +98,18 @@ const Accesorios = () => {
           </div>
         ) : (
           <>
-             <header className="accesorios-header">
+            <header className="accesorios-header">
               <h2>{accesorio.nombreProducto}</h2>
-              <div className="accesorios-stock">
+              <div
+                className={
+                  "accesorios-stock" +
+                  (accesorio.Stock < 3
+                    ? " accesorios-stock-rojo"
+                    : accesorio.Stock < 5
+                    ? " accesorios-stock-amarillo"
+                    : "")
+                }
+              >
                 Stock actual: {accesorio.Stock}
               </div>
               <div className="accesorios-desc">

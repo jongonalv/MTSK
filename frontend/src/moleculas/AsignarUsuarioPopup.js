@@ -1,6 +1,6 @@
 import React from 'react';
 import './estilos/asignarUsuarioPopup.css';
-import { useUsuariosSearch } from '../hooks/useUsuariosSearch';
+import { useUsuariosSearch } from '../hooks/useUsuarios';
 
 const AsignarUsuarioPopup = ({ equipo, onClose, onAssign, reloadEquipos }) => {
   const { searchTerm, setSearchTerm, filteredUsuarios } = useUsuariosSearch();

@@ -63,7 +63,7 @@ export function useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos }) 
     }
   };
 
-  // Validación del formulario
+  // Validación del formulario 
   const validateForm = () => {
     const newErrors = {};
     if (!formData.etiquetaEquipo) newErrors.etiquetaEquipo  = 'La etiqueta de equipo es requerida';
