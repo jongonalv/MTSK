@@ -13,6 +13,20 @@
   gap: 1.5rem;
 }
 
+.equipos-header {
+  background: #fff;
+  color: #da321c;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 2px 12px rgba(218, 50, 28, 0.08);
+  border-bottom: 2px solid #f3d3cf;
+  text-shadow: 0 2px 8px rgba(218, 50, 28, 0.07);
+}
+
 /* Contenedor de contenido de equipos - Mejor estructura responsive */
 .equipos-content {
   display: grid;

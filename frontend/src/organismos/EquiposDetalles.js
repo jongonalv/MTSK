@@ -58,7 +58,7 @@ const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {
     try {
       setError(null);
 
-      await fetch("http://localhost:3001/updateProducto", {
+     await fetch("/updateProducto", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -71,7 +71,7 @@ const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {
         }),
       });
 
-      await fetch("http://localhost:3001/updateEquipo", {
+      await fetch("/updateEquipo", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

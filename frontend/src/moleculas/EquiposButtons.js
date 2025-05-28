@@ -11,7 +11,7 @@ const EquiposButtons = ({ setIsModalOpen, equipo, onEquiposUpdated, reloadEquipo
     const confirmDelete = window.confirm(`¿Estás seguro de que deseas eliminar el equipo ${equipo.etiquetaEquipo}?`);
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:3001/equipo/${equipo.etiquetaEquipo}`, {
+        const response = await fetch(`/equipo/${equipo.etiquetaEquipo}`, {
           method: 'DELETE',
         });
 
@@ -31,7 +31,7 @@ const EquiposButtons = ({ setIsModalOpen, equipo, onEquiposUpdated, reloadEquipo
   // Función para asignar un usuario a un equipo
   const handleAssign = async (equipo, usuario) => {
     try {
-      const response = await fetch(`http://localhost:3001/equipo/${equipo.etiquetaEquipo}/asignar`, {
+      const response = await fetch(`/equipo/${equipo.etiquetaEquipo}/asignar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

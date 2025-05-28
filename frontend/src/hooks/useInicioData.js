@@ -12,8 +12,8 @@ export const useInicioData = () => {
     setLoading(true);
     try {
       const [equiposRes, usuariosRes] = await Promise.all([
-        fetch('http://localhost:3001/equipos'),
-        fetch('http://localhost:3001/usuarios')
+        fetch('/equipos'),
+        fetch('/usuarios')
       ]);
       setEquipos(await equiposRes.json());
       setUsuarios(await usuariosRes.json());
@@ -26,7 +26,7 @@ export const useInicioData = () => {
   const fetchMovimientos = useCallback(async () => {
     setLoadingMov(true);
     try {
-      const res = await fetch('http://localhost:3001/movimientos?_limit=5&_sort=fecha&_order=desc');
+      const res = await fetch('/movimientos?_limit=5&_sort=fecha&_order=desc');
       setMovimientos(await res.json());
     } catch (err) {
       console.error("Error al cargar movimientos:", err);

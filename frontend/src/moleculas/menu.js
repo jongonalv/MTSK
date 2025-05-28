@@ -21,7 +21,7 @@ const Menu = () => {
 
   // Función para obtener los equipos
   const fetchEquipos = useCallback(() => {
-    return fetch('http://localhost:3001/equipos')
+    return fetch('/equipos')
       .then((response) => response.json())
       .then((data) => {
         setEquiposData(data);

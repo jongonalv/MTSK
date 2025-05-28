@@ -19,7 +19,7 @@ const QuickActions = () => {
     setHideMessage(false);
     try {
       // 1. Obtener usuarios existentes
-      const resUsuarios = await fetch('http://localhost:3001/usuarios');
+      const resUsuarios = await fetch('/usuarios');
       if (!resUsuarios.ok) throw new Error('No se pudo obtener usuarios');
       const usuarios = await resUsuarios.json();
 
@@ -33,7 +33,7 @@ const QuickActions = () => {
       }
 
       // 3. Guardar nuevo usuario
-      const res = await fetch('http://localhost:3001/usuarios', {
+      const res = await fetch('/usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ Usuario: usuario, Nombre: nombre }),

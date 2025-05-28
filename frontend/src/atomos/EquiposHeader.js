@@ -1,5 +1,4 @@
 import React from 'react';
-import './estilos/header.css';
 
 const EquiposHeader = () => {
   return (

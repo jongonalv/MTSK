@@ -1,5 +1,4 @@
 import React from 'react';
-import './estilos/barraBusqueda.css';
 
 const BarraBusqueda = ({ searchTerm, handleSearchChange }) => {
   const handleChange = (e) => {
