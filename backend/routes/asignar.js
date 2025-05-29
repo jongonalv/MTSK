@@ -14,18 +14,21 @@ router.post('/equipo/:etiquetaEquipo/asignar', (req, res) => {
         const deleteQuery = `DELETE FROM equipo_has_usuario WHERE etiquetaEquipo = ?`;
         db.query(deleteQuery, [etiquetaEquipo], (err) => {
             if (err) {
+                console.error('Error al eliminar usuario asignado:', err);
                 return db.rollback(() => res.status(500).json({ error: 'Error al eliminar usuario asignado' }));
-            }
+            }   
+            console.log('Insertando:', etiquetaEquipo, usuario.Usuario);
             const insertQuery = `INSERT INTO equipo_has_usuario (etiquetaEquipo, Usuario) VALUES (?, ?)`;
-            db.query(insertQuery, [etiquetaEquipo, usuario], (err) => {
+            db.query(insertQuery, [etiquetaEquipo, usuario.Usuario], (err) => {
                 if (err) {
+                    console.error('Error al asignar usuario:', err);
                     return db.rollback(() => res.status(500).json({ error: 'Error al asignar usuario' }));
                 }
-                db.query('SELECT Nombre FROM usuario WHERE Usuario = ?', [usuario], (err, results) => {
+                db.query('SELECT Nombre FROM usuario WHERE Usuario = ?', [usuario.Usuario], (err, results) => {
                     if (err) {
                         return db.rollback(() => res.status(500).json({ error: 'Error al obtener el nombre del usuario' }));
                     }
-                    const nombreUsuario = results && results[0] ? results[0].Nombre : usuario;
+                    const nombreUsuario = results && results[0] ? results[0].Nombre : usuario.Usuario;
                     const comentario = `Se ha asignado el equipo ${etiquetaEquipo} a ${nombreUsuario}`;
                     const tipoMovimiento = 'Asignar usuario';
                     const now = new Date();
@@ -36,7 +39,7 @@ router.post('/equipo/:etiquetaEquipo/asignar', (req, res) => {
                     `;
                     db.query(
                         movimientoQuery,
-                        [etiquetaEquipo, usuario, fecha, tipoMovimiento, comentario],
+                        [etiquetaEquipo, usuario.Usuario, fecha, tipoMovimiento, comentario],
                         (err) => {
                             if (err) {
                                 return db.rollback(() => res.status(500).json({ error: 'Error al registrar movimiento' }));

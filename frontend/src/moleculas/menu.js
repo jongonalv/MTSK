@@ -63,23 +63,20 @@ const Menu = () => {
         <ul className="menu-list">
           <li className="menu-item" onClick={() => handleMenuClick('inicio')}>Inicio</li>
           <li className="menu-item" onClick={() => handleMenuClick('equipos')}>Equipos</li>
-          <li className="menu-item" onClick={() => handleMenuClick('impresoras')}>Impresoras</li>
           <li className="menu-item" onClick={() => handleMenuClick('accesorios')}>Accesorios</li>
+          <li className="menu-item" onClick={() => handleMenuClick('impresoras')}>Impresoras</li>
           <li className="menu-item" onClick={() => handleMenuClick('monitores')}>Monitores</li>
           <li className="menu-item" onClick={() => handleMenuClick('proyectores')}>Proyectores</li>
-          <li className="menu-item" onClick={() => handleMenuClick('licencias')}>Licencias</li>
         </ul>
       </nav>
 
       {/* Renderizado de los componentes basados en el estado */}
       {selectedComponent === 'equipos' && <Equipos equiposData={equiposData} recentEquipos={recentEquipos} fetchEquipos={fetchEquipos} />}
       {selectedComponent === 'inicio' && <h1><Inicio/></h1>}
-      {selectedComponent === 'nuevo-movimiento' && <h1>Nuevo Movimiento</h1>}
-      {selectedComponent === 'impresoras' && <h1>Impresoras</h1>}
       {selectedComponent === 'accesorios' && <h1><Accesorios/></h1>}
+      {selectedComponent === 'impresoras' && <h1>Impresoras</h1>}
       {selectedComponent === 'monitores' && <h1>Monitores</h1>}
       {selectedComponent === 'proyectores' && <h1>Proyectores</h1>}
-      {selectedComponent === 'licencias' && <h1>Licencias</h1>}
     </div>
   );
 };

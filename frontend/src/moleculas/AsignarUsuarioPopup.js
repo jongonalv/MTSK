@@ -6,7 +6,7 @@ const AsignarUsuarioPopup = ({ equipo, onClose, onAssign, reloadEquipos }) => {
   const { searchTerm, setSearchTerm, filteredUsuarios } = useUsuariosSearch();
 
   const handleAssign = (user) => {
-    onAssign(user);
+    onAssign(equipo, user);
     if (reloadEquipos) reloadEquipos();
     onClose();
   };

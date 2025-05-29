@@ -18,10 +18,7 @@ const RecentEquipos = ({ recentEquipos, handleRowClick, spinAnimationActive }) =
       ) : (
         <ul>
           {equiposToShow.map((equipo) => (
-              <li
-                key={equipo.id}
-                onClick={() => handleRowClick(equipo)}
-              >
+              <li key={equipo.etiquetaEquipo} onClick={() => handleRowClick(equipo)}>
               <span>{equipo.etiquetaEquipo}</span> - <span>{equipo.marca}</span> <span>{equipo.modelo}</span> - <span className="usuario-highlight">{formatUsuario(equipo.usuario)}</span>
             </li>
           ))}
