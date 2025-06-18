@@ -9,11 +9,11 @@ const EquiposSinAsignar = ({ onClose }) => {
     const fetchEquipos = async () => {
       try {
         // 1. Obtener todos los equipos
-        const resEquipos = await fetch('/equipos');
+        const resEquipos = await fetch(`${process.env.REACT_APP_API_URL}/api/equipos`);
         const equipos = await resEquipos.json();
 
         // 2. Obtener etiquetas de equipos asignados
-        const resAsignados = await fetch('/equipos-sin-asignar');
+        const resAsignados = await fetch(`${process.env.REACT_APP_API_URL}/api/equipos-sin-asignar`);
         const equiposAsignados = await resAsignados.json();
         const etiquetasAsignadas = equiposAsignados.map(e => e.etiquetaEquipo);
 

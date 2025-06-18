@@ -36,13 +36,13 @@ export function useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos }) 
       const generarEtiqueta = async () => {
         const prefix = getEtiquetaPrefix(formData.tipo, formData.empresa, formData.esBackup);
         if (!prefix) return;
-          try {
-            const res = await fetch(`/siguienteEtiqueta?prefijo=${prefix}`);
-            const data = await res.json();
-            setFormData(f => ({ ...f, etiquetaEquipo: `${prefix}${data.siguienteNumero}` }));
-          } catch (err) {
-            setFormData(f => ({ ...f, etiquetaEquipo: '' }));
-          }
+        try {
+          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/siguienteEtiqueta?prefijo=${prefix}`);
+          const data = await res.json();
+          setFormData(f => ({ ...f, etiquetaEquipo: `${prefix}${data.siguienteNumero}` }));
+        } catch (err) {
+          setFormData(f => ({ ...f, etiquetaEquipo: '' }));
+        }
       };
       generarEtiqueta();
     }, 300);
@@ -89,7 +89,7 @@ export function useAgregarEquipoForm({ onSubmit, fetchEquipos, reloadEquipos }) 
       const tipoFinal = formData.esBackup ? "BACKUP" : formData.tipo;
       const { esBackup, ...rest } = formData;
       const dataToSend = { ...rest, tipo: tipoFinal };
-      const response = await fetch('/agregarEquipo', {
+      const response = await fetch('/api/agregarEquipo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend),

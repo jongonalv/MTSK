@@ -1,70 +1,77 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const db = require("../db"); // conexión con mssql
 
-router.delete('/equipo/:etiquetaEquipo', (req, res) => {
+router.delete('/equipo/:etiquetaEquipo', async (req, res) => {
     const { etiquetaEquipo } = req.params;
-    db.beginTransaction(err => {
-        if (err) {
-            res.status(500).json({ error: 'Error al iniciar la transacción' });
-            return;
-        }
-        const sqlUsuario = `SELECT Usuario FROM equipo_has_usuario WHERE etiquetaEquipo = ? LIMIT 1`;
-        db.query(sqlUsuario, [etiquetaEquipo], (err, usuarioResult) => {
-            if (err) {
-                return db.rollback(() => res.status(500).json({ error: 'Error al obtener usuario asignado' }));
-            }
-            let usuario = null;
-            if (usuarioResult && usuarioResult.length > 0 && usuarioResult[0].Usuario) {
-                usuario = usuarioResult[0].Usuario;
-            }
-            const sqlDeleteMovimientos = `DELETE FROM movimiento WHERE etiquetaProducto = ?`;
-            db.query(sqlDeleteMovimientos, [etiquetaEquipo], (err) => {
-                if (err) {
-                    return db.rollback(() => res.status(500).json({ error: 'Error al eliminar movimientos relacionados' }));
-                }
-                const sqlDeleteRelacion = `DELETE FROM equipo_has_usuario WHERE etiquetaEquipo = ?`;
-                db.query(sqlDeleteRelacion, [etiquetaEquipo], (err) => {
-                    if (err) {
-                        return db.rollback(() => res.status(500).json({ error: 'Error al eliminar relación equipo-usuario' }));
-                    }
-                    const sqlDeleteEquipo = `DELETE FROM equipo WHERE etiquetaEquipo = ?`;
-                    db.query(sqlDeleteEquipo, [etiquetaEquipo], (err) => {
-                        if (err) {
-                            return db.rollback(() => res.status(500).json({ error: 'Error al eliminar el equipo' }));
-                        }
-                        const sqlDeleteProducto = `DELETE FROM producto WHERE etiqueta = ?`;
-                        db.query(sqlDeleteProducto, [etiquetaEquipo], (err) => {
-                            if (err) {
-                                return db.rollback(() => res.status(500).json({ error: 'Error al eliminar el producto' }));
-                            }
-                            const tipoMovimiento = 'Eliminar equipo';
-                            const now = new Date();
-                            const fecha = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-                            const comentario = usuario
-                                ? `Se ha eliminado el equipo ${etiquetaEquipo} (usuario asignado: ${usuario})`
-                                : `Se ha eliminado el equipo ${etiquetaEquipo}`;
-                            const sqlMovimiento = `
-                                INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
-                                VALUES (?, ?, ?, ?, ?)
-                            `;
-                            db.query(sqlMovimiento, [null, usuario, fecha, tipoMovimiento, comentario], (err) => {
-                                if (err) {
-                                    return db.rollback(() => res.status(500).json({ error: 'Error al registrar el movimiento' }));
-                                }
-                                db.commit(err => {
-                                    if (err) {
-                                        return db.rollback(() => res.status(500).json({ error: 'Error al confirmar la transacción' }));
-                                    }
-                                    res.json({ message: 'Equipo, producto, movimientos y relación eliminados correctamente. Movimiento de eliminación registrado.' });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
+    const transaction = new db.Transaction();
+
+    try {
+        await transaction.begin();
+
+        // 1. Obtener usuario asignado al equipo
+        const reqUsuario = new db.Request(transaction);
+        const usuarioResult = await reqUsuario
+            .input('etiquetaEquipo', db.VarChar, etiquetaEquipo)
+            .query(`
+                SELECT TOP 1 Usuario FROM equipo_has_usuario WHERE etiquetaEquipo = @etiquetaEquipo
+            `);
+
+        const usuario = usuarioResult.recordset.length > 0 ? usuarioResult.recordset[0].Usuario : null;
+
+        // 2. Eliminar movimientos del equipo
+        const reqDelMovs = new db.Request(transaction);
+        await reqDelMovs
+            .input('etiquetaProducto', db.VarChar, etiquetaEquipo)
+            .query('DELETE FROM movimiento WHERE etiquetaProducto = @etiquetaProducto');
+
+        // 3. Eliminar relación equipo-usuario
+        const reqDelRel = new db.Request(transaction);
+        await reqDelRel
+            .input('etiquetaEquipo', db.VarChar, etiquetaEquipo)
+            .query('DELETE FROM equipo_has_usuario WHERE etiquetaEquipo = @etiquetaEquipo');
+
+        // 4. Eliminar equipo
+        const reqDelEquipo = new db.Request(transaction);
+        await reqDelEquipo
+            .input('etiquetaEquipo', db.VarChar, etiquetaEquipo)
+            .query('DELETE FROM equipo WHERE etiquetaEquipo = @etiquetaEquipo');
+
+        // 5. Eliminar producto
+        const reqDelProd = new db.Request(transaction);
+        await reqDelProd
+            .input('etiqueta', db.VarChar, etiquetaEquipo)
+            .query('DELETE FROM producto WHERE etiqueta = @etiqueta');
+
+        // 6. Registrar movimiento de eliminación
+        const comentario = usuario
+            ? `Se ha eliminado el equipo ${etiquetaEquipo} (usuario asignado: ${usuario})`
+            : `Se ha eliminado el equipo ${etiquetaEquipo}`;
+        const tipoMovimiento = 'Eliminar equipo';
+        const now = new Date();
+
+        const reqMov = new db.Request(transaction);
+        await reqMov
+            .input('etiquetaProducto', db.VarChar, null)
+            .input('usuario', db.VarChar, usuario)
+            .input('fecha', db.DateTime, now)
+            .input('tipoMovimiento', db.VarChar, tipoMovimiento)
+            .input('comentario', db.VarChar, comentario)
+            .query(`
+                INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
+                VALUES (@etiquetaProducto, @usuario, @fecha, @tipoMovimiento, @comentario)
+            `);
+
+        await transaction.commit();
+        res.json({
+            message: 'Equipo, producto, movimientos y relación eliminados correctamente. Movimiento de eliminación registrado.'
         });
-    });
+
+    } catch (err) {
+        console.error('Error en la transacción de eliminación:', err);
+        await transaction.rollback();
+        res.status(500).json({ error: 'Error al eliminar el equipo' });
+    }
 });
 
 module.exports = router;

@@ -7,7 +7,7 @@ export function useUsuariosSearch() {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await fetch('/usuarios');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/usuarios`);
         const data = await response.json();
         setUsuarios(data);
       } catch (error) {

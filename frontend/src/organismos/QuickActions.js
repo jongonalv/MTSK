@@ -17,7 +17,7 @@ const QuickActions = () => {
   const [hideMessage, setHideMessage] = useState(false);
 
   const handleGenerarReporte = async () => {
-    const res = await fetch('/reporte-equipos', { method: 'GET' });
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reporte-equipos`, { method: 'GET' });
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -35,7 +35,7 @@ const QuickActions = () => {
     setHideMessage(false);
     try {
       // 1. Obtener usuarios existentes
-      const resUsuarios = await fetch('/usuarios');
+      const resUsuarios = await fetch(`${process.env.REACT_APP_API_URL}/api/usuarios`);
       if (!resUsuarios.ok) throw new Error('No se pudo obtener usuarios');
       const usuarios = await resUsuarios.json();
 
@@ -49,7 +49,7 @@ const QuickActions = () => {
       }
 
       // 3. Guardar nuevo usuario
-      const res = await fetch('/usuarios', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/usuarios`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ Usuario: usuario, Nombre: nombre }),

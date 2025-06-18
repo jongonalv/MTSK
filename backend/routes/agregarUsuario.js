@@ -1,44 +1,59 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const { sql, poolPromise } = require("../db"); // <-- Importa así
 
-// Ruta para agregar un usuario
-router.post('/usuarios', (req, res) => {
+router.post('/usuarios', async (req, res) => {
     const { Usuario, Nombre } = req.body;
-    
-    // Validar que los campos requeridos no estén vacíos
-    if (!Usuario || !Nombre) {
-        return res.status(400).json({ error: 'Usuario y Nombre son requeridos' });
+
+    if (typeof Usuario !== 'string' || typeof Nombre !== 'string' || !Usuario.trim() || !Nombre.trim()) {
+        return res.status(400).json({ error: 'Usuario y Nombre son requeridos y deben ser cadenas no vacías' });
     }
-    const sqlQuery = 'INSERT INTO usuario (Usuario, Nombre) VALUES (?, ?)';
 
-    // Verificar si el usuario ya existe
-       db.query(sqlQuery, [Usuario, Nombre], (err, result) => {
-        if (err) {
-            console.error('Error al agregar usuario: ', err);
-            return res.status(500).json({ error: 'Error al agregar usuario' });
-        }
+    let transaction;
 
-        // Variables para registrar el movimiento
+    try {
+        const pool = await poolPromise; // <-- Espera el pool
+        transaction = new sql.Transaction(pool);
+        await transaction.begin();
+
+        // Insertar usuario
+        const request1 = new sql.Request(transaction);
+        await request1
+            .input('Usuario', sql.VarChar, Usuario)
+            .input('Nombre', sql.VarChar, Nombre)
+            .query(`
+                INSERT INTO dbo.usuario (Usuario, Nombre)
+                VALUES (@Usuario, @Nombre);
+            `);
+
+        // Insertar movimiento asociado
         const tipoMovimiento = 'Alta usuario';
         const comentario = `Se ha agregado el usuario ${Usuario} (${Nombre}) al inventario`;
         const now = new Date();
-        const fecha = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-        const sqlMovimiento = `
-            INSERT INTO movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
-            VALUES (?, ?, ?, ?, ?)
-        `;
-        // Registrar el movimiento
-        db.query(sqlMovimiento, [null, Usuario, fecha, tipoMovimiento, comentario], (err) => {
-            if (err) {
-                console.error('Error al registrar movimiento: ', err);
-                return res.status(201).json({ 
-                    message: 'Usuario agregado, pero error al registrar movimiento' 
-                });
-            }
-            res.status(201).json({ message: 'Usuario agregado y movimiento registrado correctamente' });
+
+        const request2 = new sql.Request(transaction);
+        await request2
+            .input('etiquetaProducto', sql.VarChar, null)
+            .input('usuario', sql.VarChar, Usuario)
+            .input('fecha', sql.DateTime, now)
+            .input('tipoMovimiento', sql.VarChar, tipoMovimiento)
+            .input('comentario', sql.VarChar, comentario)
+            .query(`
+                INSERT INTO dbo.movimiento (etiquetaProducto, usuario, fecha, tipoMovimiento, Comentario)
+                VALUES (@etiquetaProducto, @usuario, @fecha, @tipoMovimiento, @comentario);
+            `);
+
+        await transaction.commit();
+        return res.status(201).json({ message: 'Usuario agregado y movimiento registrado correctamente' });
+
+    } catch (err) {
+        console.error('Error al agregar usuario o registrar movimiento:', err);
+        if (transaction) await transaction.rollback();
+        return res.status(500).json({
+            error: 'Error al agregar usuario',
+            detalle: err.originalError?.info?.message || err.message
         });
-    });
+    }
 });
 
 module.exports = router;

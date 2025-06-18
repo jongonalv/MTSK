@@ -58,7 +58,7 @@ const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {
     try {
       setError(null);
 
-     await fetch("/updateProducto", {
+     await fetch(`${process.env.REACT_APP_API_URL}/api/updateProducto`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -71,7 +71,7 @@ const EquiposDetail = ({ equipo, reloadEquipos, fetchEquipos }) => {
         }),
       });
 
-      await fetch("/updateEquipo", {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/updateEquipo`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

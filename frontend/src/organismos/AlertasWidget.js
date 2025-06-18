@@ -6,7 +6,7 @@ const AlertasWidget = () => {
   const [verTodas, setVerTodas] = useState(false);
 
   useEffect(() => {
-    fetch('/alertas')
+    fetch(`${process.env.REACT_APP_API_URL}/api/alertas`)
       .then(res => res.json())
       .then(data => {
         setAlertas(Array.isArray(data) ? data : []);

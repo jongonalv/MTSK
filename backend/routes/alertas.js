@@ -1,56 +1,64 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const { sql, poolPromise } = require("../db");
 
-// Ruta para conseguir todas las alertas del backend
-router.get('/alertas', (req, res) => {
-  db.query('SELECT * FROM alerta', (err, results) => {
-    if (err) {
-      console.error("Error al obtener alertas:", err);
-      return res.status(500).json({ error: "Error al obtener las alertas" });
-    }
-    res.json(results);
-  });
+// Obtener todas las alertas
+router.get('/alertas', async (req, res) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query('SELECT * FROM alerta');
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Error al obtener alertas:", err);
+    res.status(500).json({ error: "Error al obtener las alertas" });
+  }
 });
 
-// Ruta para agregar una alerta
-router.post('/alertas', (req, res) => {
+// Agregar una alerta
+router.post('/alertas', async (req, res) => {
   const { etiquetaProducto, mensaje } = req.body;
   if (!etiquetaProducto || !mensaje) {
     return res.status(400).json({ error: "Faltan datos requeridos" });
   }
 
-  const fecha = new Date();
-  const sql = `
-    INSERT INTO alerta (etiquetaProducto, Fecha, Mensaje)
-    VALUES (?, ?, ?)
-  `;
+  try {
+    const pool = await poolPromise;
+    const fecha = new Date();
 
-  db.query(sql, [etiquetaProducto, fecha, mensaje], (err, result) => {
-    if (err) {
-      console.error("Error al insertar alerta:", err);
-      return res.status(500).json({ error: "Error al guardar la alerta" });
-    }
-    res.json({ success: true, id: result.insertId });
-  });
+    await pool.request()
+      .input('etiquetaProducto', sql.VarChar, etiquetaProducto)
+      .input('Fecha', sql.DateTime, fecha)
+      .input('Mensaje', sql.VarChar, mensaje)
+      .query(`
+        INSERT INTO alerta (etiquetaProducto, Fecha, Mensaje)
+        VALUES (@etiquetaProducto, @Fecha, @Mensaje)
+      `);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error al insertar alerta:", err);
+    res.status(500).json({ error: "Error al guardar la alerta" });
+  }
 });
 
-router.delete('/alertas/:etiquetaProducto', (req, res) => {
+// Eliminar alertas por etiquetaProducto
+router.delete('/alertas/:etiquetaProducto', async (req, res) => {
   const { etiquetaProducto } = req.params;
   if (!etiquetaProducto) {
     return res.status(400).json({ error: "Falta etiquetaProducto" });
   }
-  db.query(
-    'DELETE FROM alerta WHERE etiquetaProducto = ?',
-    [etiquetaProducto],
-    (err, result) => {
-      if (err) {
-        console.error("Error al borrar alerta:", err);
-        return res.status(500).json({ error: "Error al borrar la alerta" });
-      }
-      res.json({ success: true, deleted: result.affectedRows });
-    }
-  );
+
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .input('etiquetaProducto', sql.VarChar, etiquetaProducto)
+      .query('DELETE FROM alerta WHERE etiquetaProducto = @etiquetaProducto');
+
+    res.json({ success: true, deleted: result.rowsAffected[0] });
+  } catch (err) {
+    console.error("Error al borrar alerta:", err);
+    res.status(500).json({ error: "Error al borrar la alerta" });
+  }
 });
 
 module.exports = router;

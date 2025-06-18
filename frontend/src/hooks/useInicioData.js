@@ -12,8 +12,8 @@ export const useInicioData = () => {
     setLoading(true);
     try {
       const [equiposRes, usuariosRes] = await Promise.all([
-        fetch('/equipos'),
-        fetch('/usuarios')
+        fetch(`${process.env.REACT_APP_API_URL}/api/equipos`),
+        fetch(`${process.env.REACT_APP_API_URL}/api/usuarios`)
       ]);
       setEquipos(await equiposRes.json());
       setUsuarios(await usuariosRes.json());
@@ -26,7 +26,7 @@ export const useInicioData = () => {
   const fetchMovimientos = useCallback(async () => {
     setLoadingMov(true);
     try {
-      const res = await fetch('/movimientos?_limit=5&_sort=fecha&_order=desc');
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/movimientos?_limit=5&_sort=fecha&_order=desc`);
       setMovimientos(await res.json());
     } catch (err) {
       console.error("Error al cargar movimientos:", err);

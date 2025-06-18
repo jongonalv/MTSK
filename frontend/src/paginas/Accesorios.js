@@ -9,7 +9,7 @@ const Accesorios = () => {
 
   // Cargar accesorios desde el backend
   useEffect(() => {
-    fetch('/accesorios')
+    fetch(`${process.env.REACT_APP_API_URL}/api/accesorios`)
       .then(res => res.json())
       .then(data => {
         setAccesorios(Array.isArray(data) ? data : []);
@@ -22,7 +22,7 @@ const Accesorios = () => {
 
     const enviarAlerta = async (etiquetaProducto, mensaje) => {
     try {
-      await fetch('/alertas', {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/alertas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ etiquetaProducto, mensaje })
@@ -34,13 +34,13 @@ const Accesorios = () => {
 
   const handleStock = async (accion) => {
     try {
-      const res = await fetch('/accesorios/stock', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/accesorios/stock`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ etiquetaAccesorio: selected, accion })
       });
       if (res.ok) {
-        const updated = await fetch('/accesorios').then(r => r.json());
+        const updated = await fetch(`${process.env.REACT_APP_API_URL}/api/accesorios`).then(r => r.json());
         setAccesorios(updated);
 
         // Buscar el accesorio actualizado
@@ -58,7 +58,7 @@ const Accesorios = () => {
             );
           } else if (actualizado.Stock >= 5) {
             // Borra la alerta si el stock se recupera
-            await fetch(`/alertas/${actualizado.etiquetaAccesorio}`, {
+            await fetch(`/api/alertas/${actualizado.etiquetaAccesorio}`, {
               method: 'DELETE'
             });
           }

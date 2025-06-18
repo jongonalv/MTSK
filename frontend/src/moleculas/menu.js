@@ -21,7 +21,7 @@ const Menu = () => {
 
   // Función para obtener los equipos
   const fetchEquipos = useCallback(() => {
-    return fetch('/equipos')
+    return fetch(`${process.env.REACT_APP_API_URL}/api/equipos`)
       .then((response) => response.json())
       .then((data) => {
         setEquiposData(data);

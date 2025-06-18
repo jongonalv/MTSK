@@ -1,31 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const { poolPromise, sql } = require("../db");
 
-router.get('/equipos', (req, res) => {
-    const sqlQuery = `
-        SELECT 
-            equipo.etiquetaEquipo, equipo.tipo, equipo.procesador, equipo.discoDuro, equipo.memoriaRAM, equipo.numeroSerie, equipo.numeroPedido, producto.fechaCompra, producto.garantia, producto.empresa, producto.marca, producto.modelo, equipo.sistemaOperativo,
-            COALESCE(usuario.Nombre, 'Sin asignar') AS usuario
-        FROM equipo 
-        INNER JOIN producto ON producto.etiqueta = equipo.etiquetaEquipo
-        LEFT JOIN equipo_has_usuario ON equipo.etiquetaEquipo = equipo_has_usuario.etiquetaEquipo
-        LEFT JOIN usuario ON usuario.Usuario = equipo_has_usuario.Usuario
-    `;
+router.get('/equipos', async (req, res) => {
+    console.log('➡️ [GET /equipos] Petición recibida');
 
-    db.query(sqlQuery, (err, results) => {
-        if (err) {
-            console.error('Error al consultar la base de datos:', err);
-            res.status(500).json({ error: 'Error en la consulta' });
-            return;
-        }
-        results.forEach(result => {
-            if (result.fechaCompra) {
-                result.fechaCompra = result.fechaCompra.toISOString().split('T')[0];
-            }
-        });
-        res.json(results);
-    });
+    try {
+        const pool = await poolPromise;
+        console.log('🔗 Conexión a SQL Server obtenida');
+
+        const sqlQuery = `
+			USE MTSK;
+            SELECT 
+              dbo.equipo.etiquetaEquipo, dbo.equipo.tipo, dbo.equipo.procesador, dbo.equipo.discoDuro, dbo.equipo.memoriaRAM,
+              dbo.equipo.numeroSerie, dbo.equipo.numeroPedido,
+              dbo.producto.fechaCompra, dbo.producto.garantia, dbo.producto.empresa, dbo.producto.marca, dbo.producto.modelo,
+              dbo.equipo.sistemaOperativo,
+              COALESCE(dbo.usuario.Nombre, 'Sin asignar') AS usuario
+            FROM dbo.equipo
+            INNER JOIN dbo.producto ON dbo.producto.etiqueta = dbo.equipo.etiquetaEquipo
+            LEFT JOIN dbo.equipo_has_usuario ON dbo.equipo.etiquetaEquipo = dbo.equipo_has_usuario.etiquetaEquipo
+            LEFT JOIN dbo.usuario ON dbo.usuario.Usuario = dbo.equipo_has_usuario.Usuario
+        `;
+
+        console.log('📄 Ejecutando consulta SQL...');
+        const result = await pool.request().query(sqlQuery);
+
+        console.log(`✅ Consulta completada. Filas recibidas: ${result.recordset.length}`);
+
+        const data = result.recordset.map(row => ({
+            ...row,
+            fechaCompra: row.fechaCompra ? row.fechaCompra.toISOString().split('T')[0] : null
+        }));
+
+        console.log('📦 Datos procesados. Enviando respuesta JSON...');
+        res.json(data);
+
+    } catch (err) {
+        console.error("❌ Error al consultar SQL Server:", err);
+        res.status(500).json({ error: "Error en la consulta" });
+    }
 });
 
 module.exports = router;

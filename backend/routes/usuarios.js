@@ -1,17 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const { sql, poolPromise } = require("../db");
 
-router.get('/usuarios', (req, res) => {
-    const sqlQuery = 'SELECT Usuario, Nombre FROM usuario';
-    db.query(sqlQuery, (err, result) => {
-        if (err) {
-            console.error('Error al obtener la lista de usuarios: ', err);
-            res.status(500).send('Error al obtener la lista de usuarios');
-            return;
-        }
-        res.json(result);
-    });
+router.get('/usuarios', async (req, res) => {
+  const sqlQuery = `
+    USE MTSK;
+    SELECT Usuario, Nombre FROM dbo.usuario
+  `;
+
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(sqlQuery); 
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Error al obtener la lista de usuarios: ', err);
+    res.status(500).send('Error al obtener la lista de usuarios');
+  }
 });
 
 module.exports = router;

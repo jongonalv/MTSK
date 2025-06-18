@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MetricasDashboard from '../organismos/MetricasDashboard';
 import QuickActions from '../organismos/QuickActions';
 import { useInicioData } from '../hooks/useInicioData';
@@ -20,6 +20,14 @@ const Inicio = () => {
     ultimosEquipos,
     equiposSinAsignarList
   } = useInicioData();
+
+  // refrescar la página cada 5 minutos
+  useEffect(() => {
+    const Interval = setInterval(() => {
+      window.location.reload();
+    }, 300000); // 5 minutos
+    return () => clearInterval(Interval);
+  }, []);
 
   return (
     <div className="mtsk-dashboard">

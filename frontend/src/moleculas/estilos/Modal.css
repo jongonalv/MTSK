@@ -1,11 +1,10 @@
 /* Estilos base del modal */
 .modal-overlay {
-  /* Fondo increíble: gradiente animado con partículas */
   background:
-    radial-gradient(circle at 20% 30%, #ff006a93 0%, transparent 60%),
-    radial-gradient(circle at 80% 70%, #55f15546 0%, transparent 70%),
-    radial-gradient(circle at 50% 50%, #ffbe92 0%, transparent 80%),
-    linear-gradient(120deg, #20201f 0%, #4b0404 100%);
+    radial-gradient(circle at 20% 30%, #ff000093 0%, transparent 60%),
+    radial-gradient(circle at 80% 70%, #02ffb346 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, #c192ff 0%, transparent 80%),
+    linear-gradient(120deg, #ff0000 0%, #4e02ff 100%);
   position: fixed;
   top: 0;
   left: 0;
@@ -51,7 +50,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
   max-width: 480px;
   width: 100%;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow: auto;
   position: relative;
   animation: slideUp 0.25s ease-out;
@@ -59,8 +58,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   /* Scrollbar vertical personalizada */
-  scrollbar-width: thin;
-  scrollbar-color: #ff7676 #ffeaea;
+  scrollbar-width: inherit;
+  scrollbar-color: #f03a3a #ffeaea;
 }
 
 /* Scrollbar para navegadores Webkit */
@@ -100,7 +99,7 @@
   justify-content: center;
   cursor: pointer;
   color: #e53935;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   z-index: 10;
   box-shadow: 0 2px 8px #ffb6b933;
@@ -113,8 +112,7 @@
   outline: 3px solid #ffeaea;
   outline-offset: 2px;
   /* Centrado visual del icono */
-  line-height: 1;
-  padding: 0;
+  line-height: 0;
 }
 
 .modal-close span,
@@ -124,7 +122,13 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  font-size: inherit;
+  line-height: 0;
+}
+
+.modal-close span,
+.modal-close svg {
+  margin: auto;
 }
 
 .modal-close:hover, .modal-close:focus {

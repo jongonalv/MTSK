@@ -15,14 +15,18 @@ const ActividadRecienteWidget = ({ loadingMov, movimientos }) => {
   const [showAll, setShowAll] = useState(false);
   const [filtro, setFiltro] = useState("TODOS");
 
-  const movimientosRecientes = (movimientos || [])
-    .slice()
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-    .slice(0, 5);
+  const movimientosRecientes = Array.isArray(movimientos)
+    ? movimientos
+        .slice()
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        .slice(0, 5)
+    : [];
 
-  const movimientosOrdenados = (movimientos || [])
-    .slice()
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  const movimientosOrdenados = Array.isArray(movimientos)
+    ? movimientos
+        .slice()
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+    : [];
 
   const movimientosFiltrados = filtro === "TODOS"
     ? movimientosOrdenados

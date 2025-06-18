@@ -70,7 +70,7 @@ const EquiposInfo = ({ equipo: initialEquipo, usuario }) => {
     const fetchEquipoData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/equipos/${initialEquipo.etiquetaEquipo}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/equipos/${initialEquipo.etiquetaEquipo}`);
         setEquipo(response.data);
         setError(null);
       } catch (err) {
